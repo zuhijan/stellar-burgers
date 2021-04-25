@@ -1,0 +1,24 @@
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1C1C21;
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.navigation {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.flexEnd {
+  flex-grow: 1;
+  justify-content: flex-end;
+}
