@@ -8,7 +8,7 @@
 
 .list {
   max-height: 370px;
-
+  margin-left: -24px;
   overflow: auto;
 
   &::-webkit-scrollbar {

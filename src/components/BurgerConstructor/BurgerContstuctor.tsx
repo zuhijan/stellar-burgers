@@ -3,6 +3,7 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
+  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ingredientType } from "../../utils/data";
 import s from "./burgerConstructor.module.scss";
@@ -43,12 +44,14 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
 
       <div className={s.list}>
         {ingredients.map((item) => (
-          <ConstructorElement
-            key={item._id}
-            text={item.name}
-            price={item.price}
-            thumbnail={item.image_mobile}
-          />
+          <div key={item._id} style={{ display: "flex", alignItems: "center" }}>
+            <DragIcon type="primary" />
+            <ConstructorElement
+              text={item.name}
+              price={item.price}
+              thumbnail={item.image_mobile}
+            />
+          </div>
         ))}
       </div>
       <ConstructorElement
