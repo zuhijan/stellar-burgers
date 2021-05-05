@@ -17,16 +17,11 @@ const BurgerIngredientsContainer: FC<IBurgerIngredientsContainer> = ({
     <>
       <h3 className={clsx(s.text, "ml-1")}>{title}</h3>
       <div className={s.ingredients}>
-        {data.map(({ image, name, price }) => (
-          <BurgerIngredientsCard
-            key={name}
-            name={name}
-            img={image}
-            price={price}
-          />
+        {data.map((item) => (
+          <BurgerIngredientsCard key={item._id} ingredient={item} />
         ))}
       </div>
     </>
   );
 };
-export default BurgerIngredientsContainer;
+export default React.memo(BurgerIngredientsContainer);

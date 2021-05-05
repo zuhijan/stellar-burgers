@@ -6,12 +6,10 @@ const formatData = (arr: ingredientType[]) => {
   let bunArr: ingredientType[] = [];
 
   arr.forEach((item) => {
-    if (item.type === "bun") {
-      bunArr.push(item);
-    }
-    if (item.type === "main") {
-      mainArr.push(item);
-    }
+    if (item.type === "bun") bunArr.push(item);
+
+    if (item.type === "main") mainArr.push(item);
+
     if (item.type === "sauce") sauceArr.push(item);
   });
 
