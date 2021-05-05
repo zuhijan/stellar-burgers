@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   Button,
   ConstructorElement,
@@ -8,6 +8,7 @@ import {
 import { ingredientType } from "../../utils/data";
 import s from "./burgerConstructor.module.scss";
 import clsx from "clsx";
+import OrderDetails from "../OrderDetails/OrderDetails";
 
 const BUN_DEF = {
   _id: "60666c42cc7b410027a1a9b1",
@@ -33,6 +34,16 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
   bun = BUN_DEF,
   ingredients,
 }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickButton = () => {
+    setOpen(true);
+  };
+
+  const handleClickClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className={s.root}>
       <ConstructorElement
@@ -41,7 +52,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
         price={bun.price}
         thumbnail={bun.image_mobile}
       />
-
       <div className={s.list}>
         {ingredients.map((item) => (
           <div key={item._id} style={{ display: "flex", alignItems: "center" }}>
@@ -54,6 +64,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
           </div>
         ))}
       </div>
+
       <ConstructorElement
         isLocked={true}
         text={bun.name}
@@ -65,11 +76,11 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
           <p className={clsx(s.text, "mr-1 text_type_digits-default")}>120</p>
           <CurrencyIcon type="primary" />
         </div>
-
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={handleClickButton}>
           Оформить заказ
         </Button>
       </div>
+      {open && <OrderDetails onClose={handleClickClose} />}
     </div>
   );
 };
