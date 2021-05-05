@@ -5,11 +5,11 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  cursor: pointer;
 
   & > [class*='counter'] {
     right: 5px;
   }
-
 }
 
 .priceRow {
