@@ -31,6 +31,9 @@ function App() {
     const getIngredients = async () => {
       try {
         const res = await fetch(API_URL);
+        if (!res.ok) {
+          throw new Error("Ответ сети был не ok.");
+        }
         const ingredients = await res.json();
         const ingredientsData = formatDataIngredients(ingredients.data);
         setIngredients(ingredientsData);
