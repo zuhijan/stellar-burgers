@@ -11,7 +11,7 @@ export interface IModal {
 
 const Modal: FC<IModal> = ({ title, children, onClose }) => {
   return (
-    <ModalOverlay>
+    <ModalOverlay onClose={onClose}>
       <div className={clsx(s.modal, "pt-30 pb-30 pl-25 pr-25")}>
         <CloseIcon type="primary" onClick={onClose} />
         <h3 className="text text_type_main-large">{title}</h3>
