@@ -1,0 +1,9 @@
+.ingredients {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+}
+
+
+.text {
+  text-align: left;
+}

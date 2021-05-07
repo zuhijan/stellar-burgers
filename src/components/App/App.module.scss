@@ -1,0 +1,21 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.burgerContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text {
+  text-align: left;
+  align-self: flex-start;
+}
