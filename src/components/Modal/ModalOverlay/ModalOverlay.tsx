@@ -11,21 +11,22 @@ const ModalOverlay: FC<IModalOverlay> = ({ children, onClose }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const currentEl = overlayRef.current;
     const handleClickClose = (e: MouseEvent) => {
-      if (e.target === overlayRef.current) {
+      if (e.target === currentEl) {
         onClose();
       }
     };
 
-    if (overlayRef && overlayRef.current) {
-      overlayRef.current.addEventListener("click", handleClickClose);
+    if (overlayRef && currentEl) {
+      currentEl.addEventListener("click", handleClickClose);
     }
     return () => {
-      if (overlayRef && overlayRef.current) {
-        overlayRef.current.removeEventListener("click", handleClickClose);
+      if (overlayRef && currentEl) {
+        currentEl.removeEventListener("click", handleClickClose);
       }
     };
-  }, []);
+  }, [onClose]);
 
   useEffect(() => {
     const handleEsc = (e: any) => {
@@ -38,7 +39,7 @@ const ModalOverlay: FC<IModalOverlay> = ({ children, onClose }) => {
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, []);
+  }, [onClose]);
 
   return modalRoot
     ? ReactDOM.createPortal(

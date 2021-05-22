@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import {
   Button,
   ConstructorElement,
@@ -8,7 +8,9 @@ import {
 import { ingredientType } from "../../utils/data";
 import s from "./burgerConstructor.module.scss";
 import clsx from "clsx";
-import OrderDetails from "../OrderDetails/OrderDetails";
+import OrderDetails, { OrderType } from "../OrderDetails/OrderDetails";
+import { IngredientsContext } from "../../services/appContext";
+import { API_URL } from "../App/App";
 
 const BUN_DEF = {
   _id: "60666c42cc7b410027a1a9b1",
@@ -25,18 +27,74 @@ const BUN_DEF = {
   __v: 0,
 };
 
-interface IBurgerConstructor {
-  bun: ingredientType | undefined;
-  ingredients: ingredientType[];
-}
+const INGREDIENTS_DEF = [
+  {
+    _id: "609a337df07d7e0026403ac9",
+    name: "Мясо бессмертных моллюсков Protostomia",
+    type: "main",
+    proteins: 433,
+    fat: 244,
+    carbohydrates: 33,
+    calories: 420,
+    price: 1337,
+    image: "https://code.s3.yandex.net/react/code/meat-02.png",
+    image_mobile: "https://code.s3.yandex.net/react/code/meat-02-mobile.png",
+    image_large: "https://code.s3.yandex.net/react/code/meat-02-large.png",
+    __v: 0,
+  },
+  {
+    _id: "609a337df07d7e0026403aca",
+    name: "Говяжий метеорит (отбивная)",
+    type: "main",
+    proteins: 800,
+    fat: 800,
+    carbohydrates: 300,
+    calories: 2674,
+    price: 3000,
+    image: "https://code.s3.yandex.net/react/code/meat-04.png",
+    image_mobile: "https://code.s3.yandex.net/react/code/meat-04-mobile.png",
+    image_large: "https://code.s3.yandex.net/react/code/meat-04-large.png",
+    __v: 0,
+  },
+];
 
-const BurgerConstructor: FC<IBurgerConstructor> = ({
-  bun = BUN_DEF,
-  ingredients,
-}) => {
+interface IBurgerConstructor {}
+
+const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const [open, setOpen] = useState(false);
+  const [order, setOrder] = useState<OrderType>({} as OrderType);
+  const { selectedIngredients } = useContext(IngredientsContext);
 
-  const handleClickButton = () => {
+  const bun: ingredientType = selectedIngredients.bun
+    ? selectedIngredients.bun
+    : BUN_DEF;
+
+  const dataOrder = [
+    bun._id,
+    "609a337df07d7e0026403ac9",
+    "609a337df07d7e0026403aca",
+  ];
+  console.log(`### dataOrder`, dataOrder);
+  const handleClickButton = async () => {
+    try {
+      const res = await fetch(API_URL + "/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ingredients: dataOrder,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Ответ сети был не ok.");
+      }
+      const order = await res.json();
+      setOrder(order);
+      console.log(`### order`, order);
+    } catch (err) {
+      console.log(`### err.message`, err.message);
+    }
     setOpen(true);
   };
 
@@ -53,16 +111,33 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
         thumbnail={bun.image_mobile}
       />
       <div className={s.list}>
-        {ingredients.map((item) => (
-          <div key={item._id} style={{ display: "flex", alignItems: "center" }}>
-            <DragIcon type="primary" />
-            <ConstructorElement
-              text={item.name}
-              price={item.price}
-              thumbnail={item.image_mobile}
-            />
-          </div>
-        ))}
+        {selectedIngredients.other
+          ? selectedIngredients.other.map((item) => (
+              <div
+                key={item._id}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <DragIcon type="primary" />
+                <ConstructorElement
+                  text={item.name}
+                  price={item.price}
+                  thumbnail={item.image_mobile}
+                />
+              </div>
+            ))
+          : INGREDIENTS_DEF.map((item) => (
+              <div
+                key={item._id}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <DragIcon type="primary" />
+                <ConstructorElement
+                  text={item.name}
+                  price={item.price}
+                  thumbnail={item.image_mobile}
+                />
+              </div>
+            ))}
       </div>
 
       <ConstructorElement
@@ -80,7 +155,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
           Оформить заказ
         </Button>
       </div>
-      {open && <OrderDetails onClose={handleClickClose} />}
+      {open && <OrderDetails order={order} onClose={handleClickClose} />}
     </div>
   );
 };
