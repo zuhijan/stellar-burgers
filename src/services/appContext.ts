@@ -1,14 +1,13 @@
-import { createContext, Dispatch, SetStateAction } from "react";
-import {
-  IngredientDataType,
-  SelectedIngredientsType,
-} from "../components/App/App";
+import { createContext, Dispatch } from "react";
+import { SelectedIngredientsType } from "../components/App/App";
+import { ingredientType } from "../utils/data";
 
 export const IngredientsContext = createContext(
   {} as {
     selectedIngredients: SelectedIngredientsType;
-    setSelectedIngredients: React.Dispatch<
-      React.SetStateAction<SelectedIngredientsType>
-    >;
+    setSelectedIngredients: Dispatch<{
+      type: string;
+      payload: { ingredient: ingredientType; index?: number };
+    }>;
   }
 );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import clsx from "clsx";
 import "./App.module.scss";
 import AppHeader from "../AppHeader/AppHeader";
@@ -8,6 +8,7 @@ import { ingredientType } from "../../utils/data";
 import formatDataIngredients from "../../utils/formatDataIngredients";
 import s from "./App.module.scss";
 import { IngredientsContext } from "../../services/appContext";
+import { addEl, deleteEl } from "./utils";
 
 export const API_URL = "https://norma.nomoreparties.space/api";
 
@@ -18,13 +19,32 @@ export type IngredientDataType = {
 };
 
 export type SelectedIngredientsType = {
-  bun: ingredientType;
+  bun: ingredientType | null;
   other: ingredientType[];
 };
 
+const reducer = (
+  state: SelectedIngredientsType,
+  action: {
+    type: string;
+    payload: { ingredient: ingredientType; index?: number };
+  }
+) => {
+  switch (action.type) {
+    case "add":
+      return addEl(state, action.payload.ingredient);
+    case "delete":
+      return deleteEl(state, action.payload.index);
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+};
+
 function App() {
-  const [selectedIngredients, setSelectedIngredients] =
-    useState<SelectedIngredientsType>({} as SelectedIngredientsType);
+  const [selectedIngredients, setSelectedIngredients] = useReducer(reducer, {
+    bun: null,
+    other: [],
+  });
 
   const [ingredients, setIngredients] = useState<IngredientDataType>({
     main: [],
