@@ -4,15 +4,26 @@ import clsx from "clsx";
 import Modal from "../Modal/Modal";
 import { ReactComponent as DoneIcon } from "../../images/done.svg";
 
+export type OrderType = {
+  name: string;
+  order: {
+    number: number;
+  };
+  success: boolean;
+};
+
 export interface IOrderDetails {
   onClose(): void;
+  order: OrderType;
 }
 
-const OrderDetails: FC<IOrderDetails> = ({ onClose }) => {
+const OrderDetails: FC<IOrderDetails> = ({ onClose, order }) => {
   return (
     <Modal onClose={onClose}>
       <div className={s.order}>
-        <p className="text text_type_digits-large">034536</p>
+        <p className="text text_type_digits-large">
+          {order.order && order.order.number}
+        </p>
         <p className="text text_type_main-medium mt-8">идентификатор заказа</p>
         <DoneIcon className="m-15" />
         <p className="text text_type_main-default">Ваш заказ начали готовить</p>

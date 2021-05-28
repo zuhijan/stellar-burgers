@@ -1,15 +1,25 @@
 .root {
   padding-left: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.constructor {
   & > * {
     margin-bottom: 8px;
     margin-top: 8px;
   }
+
 }
 
 .list {
   max-height: 370px;
   margin-left: -24px;
   overflow: auto;
+
+
 
   &::-webkit-scrollbar {
     width: 12px;
@@ -27,6 +37,15 @@
    margin-bottom: 8px;
    margin-top: 8px;
  }
+}
+
+.lineElement {
+  display: flex;
+  align-items: center;
+
+  & > [class='constructor-element'] {
+    width: 100%;
+  }
 }
 
 .orderContainer {
