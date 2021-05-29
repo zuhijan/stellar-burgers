@@ -2,14 +2,15 @@ import React, { FC, useCallback } from "react";
 import s from "./burgerIngredients.module.scss";
 import BurgerIngredientsContainer from "./BurgerIngredientsContainer/BurgerIngredientsContainer";
 import Tabs from "../Tabs/Tabs";
-import { IngredientDataType } from "../App/App";
+import { useSelector } from "react-redux";
+import { RootState } from "../../services/store";
 
-interface IBurgerIngredients {
-  ingredients: IngredientDataType;
-}
+interface IBurgerIngredients {}
 
-const BurgerIngredients: FC<IBurgerIngredients> = ({ ingredients }) => {
+const BurgerIngredients: FC<IBurgerIngredients> = () => {
   const [current, setCurrent] = React.useState("bun");
+
+  const { ingredients } = useSelector((state: RootState) => state.ingredients);
 
   const handleClickTab = useCallback((item) => {
     setCurrent(item);
