@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import s from "./burgerConstructor.module.scss";
 import {
@@ -33,7 +33,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
       isHover: monitor.isOver(),
     }),
     drop(ingredient) {
-      console.log(`### ingredient`, ingredient);
       dispatch(addSelectedIngredient(ingredient));
     },
   });
