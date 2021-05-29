@@ -1,4 +1,4 @@
-import React, { FC, useContext, useMemo, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import clsx from "clsx";
 import s from "./burgerConstructor.module.scss";
 import {
@@ -7,18 +7,36 @@ import {
   CurrencyIcon,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderDetails, { OrderType } from "../OrderDetails/OrderDetails";
-import { IngredientsContext } from "../../services/appContext";
-import { API_URL } from "../App/App";
-import { log } from "util";
+import OrderDetails from "../OrderDetails/OrderDetails";
+import { cleanOrder, fetchOrder } from "../../services/orderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../services/store";
+import {
+  addSelectedIngredient,
+  deleteSelectedIngredient,
+} from "../../services/ingredientsSlice";
+import { useDrop } from "react-dnd";
 
 interface IBurgerConstructor {}
 
 const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const [open, setOpen] = useState(false);
-  const [order, setOrder] = useState<OrderType>({} as OrderType);
-  const { selectedIngredients, setSelectedIngredients } =
-    useContext(IngredientsContext);
+
+  const { selectedIngredients } = useSelector(
+    (state: RootState) => state.ingredients
+  );
+  const dispatch = useDispatch();
+
+  const [{ isHover }, ref] = useDrop({
+    accept: "ingredients",
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+    drop(ingredient) {
+      console.log(`### ingredient`, ingredient);
+      dispatch(addSelectedIngredient(ingredient));
+    },
+  });
 
   const isEmptyConstructor =
     !!selectedIngredients.bun ||
@@ -27,12 +45,14 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const idArray = useMemo(() => {
     const arrayOtherIds = selectedIngredients.other.reduce(
       (acc: string[], elem) => {
+        // @ts-ignore
         return [...acc, elem._id];
       },
       []
     );
     if (selectedIngredients.bun) {
-      arrayOtherIds.push(selectedIngredients.bun._id);
+      // @ts-ignore
+      arrayOtherIds.push(selectedIngredients.bun?._id);
     }
 
     return arrayOtherIds;
@@ -40,25 +60,8 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickButton = async () => {
     if (selectedIngredients.bun) {
-      try {
-        const res = await fetch(API_URL + "/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ingredients: idArray,
-          }),
-        });
-        if (!res.ok) {
-          throw new Error("Ответ сети был не ok.");
-        }
-        const order = await res.json();
-        setOrder(order);
-        console.log(`### order`, order);
-      } catch (err) {
-        console.log(`### err.message`, err.message);
-      }
+      // @ts-ignore
+      await dispatch(fetchOrder(idArray));
       setOpen(true);
     } else {
       console.log(`Милорд, не хватает булок!`);
@@ -67,6 +70,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickClose = () => {
     setOpen(false);
+    dispatch(cleanOrder());
   };
 
   const bunElement = useMemo(() => {
@@ -74,26 +78,35 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
       <div style={{ marginBottom: 8, marginTop: 8 }}>
         <ConstructorElement
           isLocked={true}
-          text={selectedIngredients.bun.name}
-          price={selectedIngredients.bun.price}
-          thumbnail={selectedIngredients.bun.image_mobile}
+          // @ts-ignore
+          text={selectedIngredients.bun?.name}
+          // @ts-ignore
+          price={selectedIngredients.bun?.price}
+          // @ts-ignore
+          thumbnail={selectedIngredients.bun?.image_mobile}
         />
       </div>
     ) : null;
   }, [selectedIngredients.bun]);
 
   const totalBun = selectedIngredients.bun
-    ? selectedIngredients.bun.price * 2
+    ? // @ts-ignore
+      selectedIngredients.bun.price * 2
     : 0;
   const totalOther =
     selectedIngredients.other.length > 0
       ? selectedIngredients.other.reduce((acc: number, current) => {
+          // @ts-ignore
           return acc + current.price;
         }, 0)
       : 0;
 
   return (
-    <div className={s.root}>
+    <div
+      ref={ref}
+      className={s.root}
+      style={{ outline: isHover ? "1px solid gold" : "" }}
+    >
       {isEmptyConstructor ? (
         <div className={s.constrictor}>
           {bunElement}
@@ -104,19 +117,21 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
                   key={index}
                   className={s.lineElement}
                   onClick={() =>
-                    setSelectedIngredients({
-                      type: "delete",
-                      payload: {
+                    dispatch(
+                      deleteSelectedIngredient({
                         ingredient: item,
                         index,
-                      },
-                    })
+                      })
+                    )
                   }
                 >
                   <DragIcon type="primary" />
                   <ConstructorElement
+                    // @ts-ignore
                     text={item.name}
+                    // @ts-ignore
                     price={item.price}
+                    // @ts-ignore
                     thumbnail={item.image_mobile}
                   />
                 </div>
@@ -138,11 +153,11 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
         </div>
       ) : (
         <p className={clsx(s.text, "m-2 text_type_main-large")}>
-          Выберите ингредиенты
+          Перетащите ингредиенты
         </p>
       )}
 
-      {open && <OrderDetails order={order} onClose={handleClickClose} />}
+      {open && <OrderDetails onClose={handleClickClose} />}
     </div>
   );
 };
