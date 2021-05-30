@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_URL } from "../components/App/App";
+import { OrderType } from "../components/OrderDetails/OrderDetails";
 
 export const fetchOrder = createAsyncThunk(
   "order/fetchOrder",
-  async (idArray) => {
+  async (idArray: string[]) => {
     try {
       const res = await fetch(API_URL + "/orders", {
         method: "POST",
@@ -29,17 +30,17 @@ export const fetchOrder = createAsyncThunk(
 export const orderSlice = createSlice({
   name: "order",
   initialState: {
-    order: {},
+    order: {} as OrderType,
   },
   reducers: {
     cleanOrder: (state) => {
-      state.order = {};
+      state.order = {} as OrderType;
     },
   },
-  extraReducers: {
-    [fetchOrder.fulfilled]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(fetchOrder.fulfilled, (state, action) => {
       state.order = action.payload;
-    },
+    });
   },
 });
 

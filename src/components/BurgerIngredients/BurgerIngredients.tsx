@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef } from "react";
+import React, { FC, useCallback, useRef } from "react";
 import s from "./burgerIngredients.module.scss";
 import BurgerIngredientsContainer from "./BurgerIngredientsContainer/BurgerIngredientsContainer";
 import Tabs from "../Tabs/Tabs";
@@ -10,10 +10,10 @@ interface IBurgerIngredients {}
 const BurgerIngredients: FC<IBurgerIngredients> = () => {
   const [current, setCurrent] = React.useState("bun");
 
-  const containerRef = useRef(null);
-  const bunRef = useRef(null);
-  const mainRef = useRef(null);
-  const sauceRef = useRef(null);
+  const containerRef = useRef<any>();
+  const bunRef = useRef<any>();
+  const mainRef = useRef<any>();
+  const sauceRef = useRef<any>();
 
   const { ingredients } = useSelector((state: RootState) => state.ingredients);
 
@@ -21,40 +21,15 @@ const BurgerIngredients: FC<IBurgerIngredients> = () => {
     setCurrent(item);
   }, []);
 
-  useEffect(() => {
-    console.log(
-      `### containerRef.current`,
-      // @ts-ignore
-      containerRef.current.getBoundingClientRect().top
-    );
-  }, [containerRef]);
-
-  useEffect(() => {
-    console.log(
-      `### bunRef.current`,
-      // @ts-ignore
-      bunRef.current.getBoundingClientRect().top
-    );
-  }, [bunRef]);
-
-  useEffect(() => {
-    console.log(
-      `### mainRef.current`,
-      // @ts-ignore
-      mainRef.current.getBoundingClientRect().top
-    );
-  }, [mainRef]);
-
   const handleScroll = () => {
     const containerPos = Math.trunc(
-      // @ts-ignore
       containerRef.current.getBoundingClientRect().top
     );
-    // @ts-ignore
+
     const bunPos = Math.trunc(bunRef.current.getBoundingClientRect().top);
-    // @ts-ignore
+
     const mainPos = Math.trunc(mainRef.current.getBoundingClientRect().top);
-    // @ts-ignore
+
     const saucePos = Math.trunc(sauceRef.current.getBoundingClientRect().top);
 
     let initValue = [
@@ -93,7 +68,6 @@ const BurgerIngredients: FC<IBurgerIngredients> = () => {
         }
       });
 
-      // @ts-ignore
       return minCount.value;
     };
     setCurrent(checkPos(initValue, containerPos));

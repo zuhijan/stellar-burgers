@@ -6,12 +6,10 @@
   //outline: 1px solid gold;
 }
 
-.constructor {
-  & > * {
-    margin-bottom: 8px;
-    margin-top: 8px;
-  }
-
+.ingredientsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .list {

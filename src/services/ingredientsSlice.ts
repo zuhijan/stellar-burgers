@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API_URL } from "../components/App/App";
+import {
+  API_URL,
+  IngredientDataType,
+  SelectedIngredientsType,
+} from "../components/App/App";
 import formatDataIngredients from "../utils/formatDataIngredients";
 import { addEl, deleteEl } from "../components/App/utils";
 
@@ -23,16 +27,14 @@ export const ingredientsSlice = createSlice({
   name: "ingredients",
   initialState: {
     ingredients: {
-      // IngredientDataType
       main: [],
       bun: [],
       sauce: [],
-    },
+    } as IngredientDataType,
     selectedIngredients: {
-      //SelectedIngredientsType
       bun: null,
       other: [],
-    },
+    } as SelectedIngredientsType,
     openedIngredient: {},
     order: [],
     orderNumber: null,
@@ -54,12 +56,10 @@ export const ingredientsSlice = createSlice({
       state.openedIngredient = action.payload;
     },
   },
-  extraReducers: {
-    // Add reducers for additional action types here, and handle loading state as needed
-    [fetchIngredients.fulfilled]: (state, action) => {
-      // Add user to the state array
+  extraReducers: (builder) => {
+    builder.addCase(fetchIngredients.fulfilled, (state, action) => {
       state.ingredients = formatDataIngredients(action.payload);
-    },
+    });
   },
 });
 

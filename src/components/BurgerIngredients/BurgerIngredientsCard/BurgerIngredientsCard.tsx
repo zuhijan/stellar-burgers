@@ -37,12 +37,10 @@ const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
 
   let countBun =
     selectedIngredients.bun &&
-    // @ts-ignore
     selectedIngredients.bun._id === ingredient._id &&
     1;
   let countOther =
     selectedIngredients.other.length &&
-    // @ts-ignore
     selectedIngredients.other.filter((item) => item._id === ingredient._id)
       .length;
   return (

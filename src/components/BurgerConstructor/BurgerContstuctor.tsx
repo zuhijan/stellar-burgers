@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import clsx from "clsx";
 import s from "./burgerConstructor.module.scss";
 import {
@@ -44,13 +44,11 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const idArray = useMemo(() => {
     const arrayOtherIds = selectedIngredients.other.reduce(
       (acc: string[], elem) => {
-        // @ts-ignore
         return [...acc, elem._id];
       },
       []
     );
     if (selectedIngredients.bun) {
-      // @ts-ignore
       arrayOtherIds.push(selectedIngredients.bun?._id);
     }
 
@@ -59,7 +57,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickButton = async () => {
     if (selectedIngredients.bun) {
-      // @ts-ignore
       await dispatch(fetchOrder(idArray));
       setOpen(true);
     } else {
@@ -72,30 +69,12 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
     dispatch(cleanOrder());
   };
 
-  const bunElement = useMemo(() => {
-    return selectedIngredients.bun ? (
-      <div style={{ marginBottom: 8, marginTop: 8 }}>
-        <ConstructorElement
-          isLocked={true}
-          // @ts-ignore
-          text={selectedIngredients.bun?.name}
-          // @ts-ignore
-          price={selectedIngredients.bun?.price}
-          // @ts-ignore
-          thumbnail={selectedIngredients.bun?.image_mobile}
-        />
-      </div>
-    ) : null;
-  }, [selectedIngredients.bun]);
-
   const totalBun = selectedIngredients.bun
-    ? // @ts-ignore
-      selectedIngredients.bun.price * 2
+    ? selectedIngredients.bun.price * 2
     : 0;
   const totalOther =
     selectedIngredients.other.length > 0
       ? selectedIngredients.other.reduce((acc: number, current) => {
-          // @ts-ignore
           return acc + current.price;
         }, 0)
       : 0;
@@ -107,19 +86,25 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
       style={{ outline: isHover ? "1px solid gold" : "" }}
     >
       {isEmptyConstructor ? (
-        <div className={s.constrictor}>
-          {bunElement}
+        <div className={s.ingredientsContainer}>
+          {selectedIngredients.bun && (
+            <ConstructorElement
+              isLocked={true}
+              type={"top"}
+              text={selectedIngredients.bun.name}
+              price={selectedIngredients.bun.price}
+              thumbnail={selectedIngredients.bun.image_mobile}
+            />
+          )}
+
           <div className={s.list}>
             {selectedIngredients.other &&
               selectedIngredients.other.map((item, index) => (
                 <div key={index} className={s.lineElement}>
                   <DragIcon type="primary" />
                   <ConstructorElement
-                    // @ts-ignore
                     text={item.name}
-                    // @ts-ignore
                     price={item.price}
-                    // @ts-ignore
                     thumbnail={item.image_mobile}
                     handleClose={() => {
                       dispatch(
@@ -133,8 +118,15 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
                 </div>
               ))}
           </div>
-
-          {bunElement}
+          {selectedIngredients.bun && (
+            <ConstructorElement
+              isLocked={true}
+              type={"bottom"}
+              text={selectedIngredients.bun.name}
+              price={selectedIngredients.bun.price}
+              thumbnail={selectedIngredients.bun.image_mobile}
+            />
+          )}
           <div className={s.orderContainer}>
             <div className={clsx(s.count, "mr-3")}>
               <p className={clsx(s.text, "mr-1 text_type_digits-default")}>
