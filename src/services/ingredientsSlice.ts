@@ -55,6 +55,19 @@ export const ingredientsSlice = createSlice({
     setOpenedIngredient: (state, action) => {
       state.openedIngredient = action.payload;
     },
+    changePosition: (state, action) => {
+      let newState = { ...state.selectedIngredients };
+      let dragItem = newState.other[action.payload.dragIndex];
+      const { dragIndex, dropIndex } = action.payload;
+
+      newState.other.splice(
+        dragIndex,
+        0,
+        newState.other.splice(dropIndex, 1)[0]
+      );
+      console.log(`### newState`, newState);
+      state.selectedIngredients = newState;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchIngredients.fulfilled, (state, action) => {
@@ -68,6 +81,7 @@ export const {
   addSelectedIngredient,
   deleteSelectedIngredient,
   setOpenedIngredient,
+  changePosition,
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

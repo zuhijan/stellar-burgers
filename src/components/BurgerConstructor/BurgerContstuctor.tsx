@@ -11,11 +11,9 @@ import OrderDetails from "../OrderDetails/OrderDetails";
 import { cleanOrder, fetchOrder } from "../../services/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../services/store";
-import {
-  addSelectedIngredient,
-  deleteSelectedIngredient,
-} from "../../services/ingredientsSlice";
-import { useDrop } from "react-dnd";
+import { addSelectedIngredient } from "../../services/ingredientsSlice";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
 
 interface IBurgerConstructor {}
 
@@ -100,22 +98,11 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
           <div className={s.list}>
             {selectedIngredients.other &&
               selectedIngredients.other.map((item, index) => (
-                <div key={index} className={s.lineElement}>
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image_mobile}
-                    handleClose={() => {
-                      dispatch(
-                        deleteSelectedIngredient({
-                          ingredient: item,
-                          index,
-                        })
-                      );
-                    }}
-                  />
-                </div>
+                <BurgerConstructorDragElement
+                  key={index}
+                  ingredient={item}
+                  index={index}
+                />
               ))}
           </div>
           {selectedIngredients.bun && (
