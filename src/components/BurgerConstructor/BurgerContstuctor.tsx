@@ -112,18 +112,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
           <div className={s.list}>
             {selectedIngredients.other &&
               selectedIngredients.other.map((item, index) => (
-                <div
-                  key={index}
-                  className={s.lineElement}
-                  onClick={() =>
-                    dispatch(
-                      deleteSelectedIngredient({
-                        ingredient: item,
-                        index,
-                      })
-                    )
-                  }
-                >
+                <div key={index} className={s.lineElement}>
                   <DragIcon type="primary" />
                   <ConstructorElement
                     // @ts-ignore
@@ -132,6 +121,14 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
                     price={item.price}
                     // @ts-ignore
                     thumbnail={item.image_mobile}
+                    handleClose={() => {
+                      dispatch(
+                        deleteSelectedIngredient({
+                          ingredient: item,
+                          index,
+                        })
+                      );
+                    }}
                   />
                 </div>
               ))}
