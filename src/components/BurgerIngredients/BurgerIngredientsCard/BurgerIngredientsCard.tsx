@@ -1,10 +1,13 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useState } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import s from "./burgerIngredientsCard.module.scss";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientDetails from "../../IngredientDetails/IngredientDetails";
 import { ingredientType } from "../../../utils/data";
-import { IngredientsContext } from "../../../services/appContext";
+import { RootState } from "../../../services/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpenedIngredient } from "../../../services/ingredientsSlice";
+import { useDrag } from "react-dnd";
 
 interface IBurgerIngredientsCard {
   ingredient: ingredientType;
@@ -12,19 +15,24 @@ interface IBurgerIngredientsCard {
 
 const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { selectedIngredients } = useSelector(
+    (state: RootState) => state.ingredients
+  );
 
-  const { selectedIngredients, setSelectedIngredients } =
-    useContext(IngredientsContext);
+  const [, ref] = useDrag({
+    type: "ingredients",
+    item: ingredient,
+  });
 
-  const handleClick = () => {
-    // setOpen(true);
+  const handleClickOpen = () => {
+    dispatch(setOpenedIngredient(ingredient));
+    setOpen(true);
+  };
 
-    setSelectedIngredients({
-      type: "add",
-      payload: {
-        ingredient,
-      },
-    });
+  const handleClickClose = () => {
+    dispatch(setOpenedIngredient({}));
+    setOpen(false);
   };
 
   let countBun =
@@ -37,7 +45,7 @@ const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
       .length;
   return (
     <>
-      <div onClick={handleClick} className={s.card}>
+      <div ref={ref} onClick={handleClickOpen} className={s.card}>
         {ingredient.type === "bun"
           ? !!countBun && <Counter count={countBun} size="small" />
           : !!countOther && <Counter count={countOther} size="small" />}
@@ -50,10 +58,7 @@ const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
         <p className="m-1 text_type_main-default">{ingredient.name}</p>
       </div>
       {open && (
-        <IngredientDetails
-          ingredient={ingredient}
-          onClose={() => setOpen(false)}
-        />
+        <IngredientDetails ingredient={ingredient} onClose={handleClickClose} />
       )}
     </>
   );

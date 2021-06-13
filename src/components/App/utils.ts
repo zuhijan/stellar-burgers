@@ -6,7 +6,8 @@ export const addEl = (
   ingredient: ingredientType
 ) => {
   if (ingredient.type === "bun") {
-    return { ...state, bun: ingredient };
+    const newState = { ...state, bun: ingredient };
+    return newState;
   } else {
     let newOther = [...state.other, ingredient];
     return { ...state, other: newOther };

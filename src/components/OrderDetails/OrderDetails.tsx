@@ -3,6 +3,8 @@ import s from "./OrderDetails.module.scss";
 import clsx from "clsx";
 import Modal from "../Modal/Modal";
 import { ReactComponent as DoneIcon } from "../../images/done.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../services/store";
 
 export type OrderType = {
   name: string;
@@ -14,10 +16,12 @@ export type OrderType = {
 
 export interface IOrderDetails {
   onClose(): void;
-  order: OrderType;
 }
 
-const OrderDetails: FC<IOrderDetails> = ({ onClose, order }) => {
+const OrderDetails: FC<IOrderDetails> = ({ onClose }) => {
+  const order = useSelector(
+    (state: RootState) => state.order.order as OrderType
+  );
   return (
     <Modal onClose={onClose}>
       <div className={s.order}>

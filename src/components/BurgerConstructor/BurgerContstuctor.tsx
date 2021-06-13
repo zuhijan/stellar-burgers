@@ -1,4 +1,4 @@
-import React, { FC, useContext, useMemo, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import clsx from "clsx";
 import s from "./burgerConstructor.module.scss";
 import {
@@ -7,18 +7,33 @@ import {
   CurrencyIcon,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderDetails, { OrderType } from "../OrderDetails/OrderDetails";
-import { IngredientsContext } from "../../services/appContext";
-import { API_URL } from "../App/App";
-import { log } from "util";
+import OrderDetails from "../OrderDetails/OrderDetails";
+import { cleanOrder, fetchOrder } from "../../services/orderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../services/store";
+import { addSelectedIngredient } from "../../services/ingredientsSlice";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
 
 interface IBurgerConstructor {}
 
 const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const [open, setOpen] = useState(false);
-  const [order, setOrder] = useState<OrderType>({} as OrderType);
-  const { selectedIngredients, setSelectedIngredients } =
-    useContext(IngredientsContext);
+
+  const { selectedIngredients } = useSelector(
+    (state: RootState) => state.ingredients
+  );
+  const dispatch = useDispatch();
+
+  const [{ isHover }, ref] = useDrop({
+    accept: "ingredients",
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+    drop(ingredient) {
+      dispatch(addSelectedIngredient(ingredient));
+    },
+  });
 
   const isEmptyConstructor =
     !!selectedIngredients.bun ||
@@ -32,7 +47,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
       []
     );
     if (selectedIngredients.bun) {
-      arrayOtherIds.push(selectedIngredients.bun._id);
+      arrayOtherIds.push(selectedIngredients.bun?._id);
     }
 
     return arrayOtherIds;
@@ -40,25 +55,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickButton = async () => {
     if (selectedIngredients.bun) {
-      try {
-        const res = await fetch(API_URL + "/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ingredients: idArray,
-          }),
-        });
-        if (!res.ok) {
-          throw new Error("Ответ сети был не ok.");
-        }
-        const order = await res.json();
-        setOrder(order);
-        console.log(`### order`, order);
-      } catch (err) {
-        console.log(`### err.message`, err.message);
-      }
+      await dispatch(fetchOrder(idArray));
       setOpen(true);
     } else {
       console.log(`Милорд, не хватает булок!`);
@@ -67,20 +64,8 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickClose = () => {
     setOpen(false);
+    dispatch(cleanOrder());
   };
-
-  const bunElement = useMemo(() => {
-    return selectedIngredients.bun ? (
-      <div style={{ marginBottom: 8, marginTop: 8 }}>
-        <ConstructorElement
-          isLocked={true}
-          text={selectedIngredients.bun.name}
-          price={selectedIngredients.bun.price}
-          thumbnail={selectedIngredients.bun.image_mobile}
-        />
-      </div>
-    ) : null;
-  }, [selectedIngredients.bun]);
 
   const totalBun = selectedIngredients.bun
     ? selectedIngredients.bun.price * 2
@@ -93,37 +78,42 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
       : 0;
 
   return (
-    <div className={s.root}>
+    <div
+      ref={ref}
+      className={s.root}
+      style={{ outline: isHover ? "1px solid gold" : "" }}
+    >
       {isEmptyConstructor ? (
-        <div className={s.constrictor}>
-          {bunElement}
+        <div className={s.ingredientsContainer}>
+          {selectedIngredients.bun && (
+            <ConstructorElement
+              isLocked={true}
+              type={"top"}
+              text={selectedIngredients.bun.name}
+              price={selectedIngredients.bun.price}
+              thumbnail={selectedIngredients.bun.image_mobile}
+            />
+          )}
+
           <div className={s.list}>
             {selectedIngredients.other &&
               selectedIngredients.other.map((item, index) => (
-                <div
+                <BurgerConstructorDragElement
                   key={index}
-                  className={s.lineElement}
-                  onClick={() =>
-                    setSelectedIngredients({
-                      type: "delete",
-                      payload: {
-                        ingredient: item,
-                        index,
-                      },
-                    })
-                  }
-                >
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image_mobile}
-                  />
-                </div>
+                  ingredient={item}
+                  index={index}
+                />
               ))}
           </div>
-
-          {bunElement}
+          {selectedIngredients.bun && (
+            <ConstructorElement
+              isLocked={true}
+              type={"bottom"}
+              text={selectedIngredients.bun.name}
+              price={selectedIngredients.bun.price}
+              thumbnail={selectedIngredients.bun.image_mobile}
+            />
+          )}
           <div className={s.orderContainer}>
             <div className={clsx(s.count, "mr-3")}>
               <p className={clsx(s.text, "mr-1 text_type_digits-default")}>
@@ -138,11 +128,11 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
         </div>
       ) : (
         <p className={clsx(s.text, "m-2 text_type_main-large")}>
-          Выберите ингредиенты
+          Перетащите ингредиенты
         </p>
       )}
 
-      {open && <OrderDetails order={order} onClose={handleClickClose} />}
+      {open && <OrderDetails onClose={handleClickClose} />}
     </div>
   );
 };
