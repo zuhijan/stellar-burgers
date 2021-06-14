@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import s from "../Login/Login.module.scss";
+import s from "./Register.module.scss";
 import {
   Button,
   Input,
