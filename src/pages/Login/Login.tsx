@@ -1,4 +1,5 @@
 import React, { FC, useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Input,
@@ -54,11 +55,15 @@ const Login: FC<ILogin> = (props) => {
       <div className={"mt-10"}>
         <p className="text text_type_main-default text_color_inactive">
           Вы — новый пользователь?{" "}
-          <span className={"text_color_link"}>Зарегистрироваться</span>
+          <Link to={"/register"} className={"text_color_link"}>
+            Зарегистрироваться
+          </Link>
         </p>
         <p className="text text_type_main-default text_color_inactive">
           Забыли пароль?{" "}
-          <span className={"text_color_link"}>Восстановить пароль</span>
+          <Link to={"/forgot-password"} className={"text_color_link"}>
+            Восстановить пароль
+          </Link>
         </p>
       </div>
     </div>
