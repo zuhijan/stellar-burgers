@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import AppHeader from "../AppHeader/AppHeader";
-import { ingredientType } from "../../utils/data";
+import { ingredientType, ORDER_FEED } from "../../utils/data";
 import s from "./App.module.scss";
 import { fetchIngredients } from "../../services/ingredientsSlice";
 
@@ -58,11 +58,11 @@ function App() {
         <Route exact path={"/reset-password"}>
           <ResetPassword />
         </Route>
-        <Route path={"/feed"}>
+        <Route exact path={"/feed"}>
           <Feed />
         </Route>
         <Route exact path={"/feed/:id"}>
-          <FeedOrder />
+          <FeedOrder order={ORDER_FEED[0]} />
         </Route>
         <Route path={"/profile"}>
           <Profile />

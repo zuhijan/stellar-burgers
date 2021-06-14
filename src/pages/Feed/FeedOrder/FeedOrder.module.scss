@@ -1,0 +1,47 @@
+.root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.total {
+  display: flex;
+}
+
+.img {
+  min-width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  background: #131316;
+  border: 2px solid #801AB3;
+
+  & > img {
+    width: 124px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+}
+
+.ingredients {
+  max-height: 280px;
+  overflow: auto;
+
+ &__item {
+    display: flex;
+   align-items: center;
+  }
+}
+
+
