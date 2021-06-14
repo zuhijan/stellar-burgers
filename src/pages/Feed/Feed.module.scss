@@ -1,0 +1,30 @@
+.root {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+
+  .content__column {
+    width: 50%;
+    max-height: 650px;
+    overflow-y: auto;
+  }
+}
+
+.status {
+  display: flex;
+}
+
+.status__column {
+  flex-basis: 40%;
+
+  .column__feed {
+    max-height: 160px;
+    overflow-y: auto;
+  }
+}
+
+.text_color_bold {
+  color: #00CCCC;
+}
