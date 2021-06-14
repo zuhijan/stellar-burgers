@@ -17,6 +17,7 @@ import Profile from "../../pages/Profile/Profile";
 import ProfileHistory from "../../pages/Profile/ProfileHistory/ProfileHistory";
 import ProfileHistoryOrder from "../../pages/Profile/ProfileHistoryOrder/ProfileHistoryOrder";
 import Ingredients from "../../pages/Ingredients/Ingredients";
+import ResetPassword from "../../pages/ResetPassword/ResetPassword";
 
 export const API_URL = "https://norma.nomoreparties.space/api";
 
@@ -53,6 +54,9 @@ function App() {
         </Route>
         <Route exact path={"/forgot-password"}>
           <ForgotPassword />
+        </Route>
+        <Route exact path={"/reset-password"}>
+          <ResetPassword />
         </Route>
         <Route path={"/feed"}>
           <Feed />
