@@ -27,3 +27,13 @@ code {
 .content-wrapper {
   max-width: 1240px;
 }
+
+.input_size_default {
+  box-sizing: border-box;
+  width: 480px !important;
+  margin-top: 24px;
+}
+
+.text_color_link {
+  color: #4C4CFF;
+}

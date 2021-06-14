@@ -1,15 +1,22 @@
 import React, { useEffect } from "react";
-import clsx from "clsx";
-import "./App.module.scss";
+import { useDispatch } from "react-redux";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import AppHeader from "../AppHeader/AppHeader";
-import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
-import BurgerConstructor from "../BurgerConstructor/BurgerContstuctor";
 import { ingredientType } from "../../utils/data";
 import s from "./App.module.scss";
-import { useDispatch } from "react-redux";
 import { fetchIngredients } from "../../services/ingredientsSlice";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+
+import Main from "../../pages/Main/Main";
+import Login from "../../pages/Login/Login";
+import Register from "../../pages/Register/Register";
+import ForgotPassword from "../../pages/ForgotPassword/ForgotPassword";
+import Feed from "../../pages/Feed/Feed";
+import FeedOrder from "../../pages/Feed/FeedOrder/FeedOrder";
+import Profile from "../../pages/Profile/Profile";
+import ProfileHistory from "../../pages/Profile/ProfileHistory/ProfileHistory";
+import ProfileHistoryOrder from "../../pages/Profile/ProfileHistoryOrder/ProfileHistoryOrder";
+import Ingredients from "../../pages/Ingredients/Ingredients";
 
 export const API_URL = "https://norma.nomoreparties.space/api";
 
@@ -34,17 +41,38 @@ function App() {
   return (
     <div className={s.App}>
       <AppHeader />
-      <section className={clsx(s.main, "content-wrapper")}>
-        <h1 className={clsx(s.text, "m-2 text_type_main-large")}>
-          Соберите бургер
-        </h1>
-        <div className={s.burgerContainer}>
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </DndProvider>
-        </div>
-      </section>
+      <Router>
+        <Route exact path={"/"}>
+          <Main />
+        </Route>
+        <Route exact path={"/login"}>
+          <Login />
+        </Route>
+        <Route exact path={"/register"}>
+          <Register />
+        </Route>
+        <Route exact path={"/forgot-password"}>
+          <ForgotPassword />
+        </Route>
+        <Route path={"/feed"}>
+          <Feed />
+        </Route>
+        <Route exact path={"/feed/:id"}>
+          <FeedOrder />
+        </Route>
+        <Route path={"/profile"}>
+          <Profile />
+        </Route>
+        <Route path={"/profile/orders"}>
+          <ProfileHistory />
+        </Route>
+        <Route exact path={"/profile/orders/:id"}>
+          <ProfileHistoryOrder />
+        </Route>
+        <Route exact path={"/ingredients/:id"}>
+          <Ingredients />
+        </Route>
+      </Router>
     </div>
   );
 }
