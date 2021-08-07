@@ -19,18 +19,20 @@ const AppHeader: FC<IAppHeader> = ({ className }) => {
       <div className={clsx(s.content, "content-wrapper")}>
         <nav className={s.navigation}>
           <AppHeaderItem
-            selected
             text={"Конструктор"}
             icon={<BurgerIcon type="primary" />}
+            to={""}
           />
           <AppHeaderItem
             text={"Лента заказов"}
             icon={<ListIcon type="primary" />}
+            to={"/feed"}
           />
           <AppHeaderItem
             className={s.flexEnd}
             text={"Личный кабинет"}
             icon={<ProfileIcon type="primary" />}
+            to={"/profile"}
           />
         </nav>
         <div className={s.logo}>

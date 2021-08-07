@@ -1,24 +1,28 @@
 import React, { FC } from "react";
 import s from "./AppHeaderItem.module.scss";
 import clsx from "clsx";
+import { Link, useRouteMatch } from "react-router-dom";
 
 interface IAppHeaderItem {
   icon: JSX.Element;
   text: string;
-  selected?: boolean;
+  to: string;
   className?: string;
 }
 
-const AppHeaderItem: FC<IAppHeaderItem> = ({
-  icon,
-  text,
-  selected,
-  className,
-}) => {
+const AppHeaderItem: FC<IAppHeaderItem> = ({ icon, text, to, className }) => {
+  const match = useRouteMatch({
+    path: to,
+    exact: true,
+  });
+
   return (
-    <div className={clsx(s.root, className, selected && s.selected, "p-2")}>
+    <Link
+      to={to}
+      className={clsx(s.root, className, match && s.selected, "p-2")}
+    >
       {icon} <p className={clsx("ml-1", "text_type_main-default")}>{text}</p>
-    </div>
+    </Link>
   );
 };
 export default AppHeaderItem;
