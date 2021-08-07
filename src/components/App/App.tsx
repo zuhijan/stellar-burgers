@@ -1,53 +1,55 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 
-import AppHeader from "../AppHeader/AppHeader";
-import { ingredientType, ORDER_FEED } from "../../utils/data";
 import s from "./App.module.scss";
-import { fetchIngredients } from "../../services/ingredientsSlice";
+import AppHeader from "../AppHeader/AppHeader";
+import { TIngredientType } from "../../services/utils/data";
+import { fetchIngredients } from "../../services/store/ingredientsSlice";
 
 import Main from "../../pages/Main/Main";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/Register";
 import ForgotPassword from "../../pages/ForgotPassword/ForgotPassword";
-import Feed from "../../pages/Feed/Feed";
-import FeedOrder from "../../pages/Feed/FeedOrder/FeedOrder";
 import Profile from "../../pages/Profile/Profile";
-import ProfileHistory from "../../pages/Profile/ProfileHistory/ProfileHistory";
-import ProfileHistoryOrder from "../../pages/Profile/ProfileHistoryOrder/ProfileHistoryOrder";
 import Ingredients from "../../pages/Ingredients/Ingredients";
 import ResetPassword from "../../pages/ResetPassword/ResetPassword";
+import NotFound from "../../pages/NotFound/NotFound";
+import ProtectedRoute from "../ProtectedRoute";
+import IngredientDetails from "../IngredientDetails/IngredientDetails";
 
-export const API_URL = "https://norma.nomoreparties.space/api";
-
-export type IngredientDataType = {
-  bun: ingredientType[];
-  sauce: ingredientType[];
-  main: ingredientType[];
+export type IngredientsDataType = {
+  bun: TIngredientType[];
+  sauce: TIngredientType[];
+  main: TIngredientType[];
 };
 
 export type SelectedIngredientsType = {
-  bun: ingredientType | null;
-  other: ingredientType[];
+  bun: TIngredientType | null;
+  other: TIngredientType[];
 };
 
 function App() {
   const dispatch = useDispatch();
+  const location = useLocation<any>();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
 
+  const background =
+    history.action === "PUSH" && location.state && location.state.background;
   return (
     <div className={s.App}>
       <AppHeader />
-      <Router>
-        <Route exact path={"/"}>
-          <Main />
-        </Route>
+
+      <Switch location={background || location}>
         <Route exact path={"/login"}>
           <Login />
+        </Route>
+        <Route exact path={"/"}>
+          <Main />
         </Route>
         <Route exact path={"/register"}>
           <Register />
@@ -58,25 +60,23 @@ function App() {
         <Route exact path={"/reset-password"}>
           <ResetPassword />
         </Route>
-        <Route exact path={"/feed"}>
-          <Feed />
-        </Route>
-        <Route exact path={"/feed/:id"}>
-          <FeedOrder order={ORDER_FEED[0]} />
-        </Route>
-        <Route path={"/profile"}>
+        <ProtectedRoute exact path={"/profile"}>
           <Profile />
-        </Route>
-        <Route path={"/profile/orders"}>
-          <ProfileHistory />
-        </Route>
-        <Route exact path={"/profile/orders/:id"}>
-          <ProfileHistoryOrder />
-        </Route>
-        <Route exact path={"/ingredients/:id"}>
+        </ProtectedRoute>
+        <Route exact path={"/ingredients/:ingredientId"}>
           <Ingredients />
         </Route>
-      </Router>
+
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+      {background && (
+        <Route
+          path="/ingredients/:ingredientId"
+          children={<IngredientDetails />}
+        />
+      )}
     </div>
   );
 }
