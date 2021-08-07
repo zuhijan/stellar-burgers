@@ -1,4 +1,4 @@
-export type ingredientType = {
+export type TIngredientType = {
   _id: string;
   name: string;
   type: string;
@@ -20,7 +20,7 @@ export type orderType = {
   number: number;
   price: number;
   status: string;
-  data: ingredientType[];
+  data: TIngredientType[];
 };
 export const ORDER_FEED: orderType[] = [
   {
@@ -1186,7 +1186,7 @@ export const ORDER_FEED: orderType[] = [
   },
 ];
 
-export const INGREDIENTS: ingredientType[] = [
+export const INGREDIENTS: TIngredientType[] = [
   {
     _id: "60666c42cc7b410027a1a9b1",
     name: "Краторная булка N-200i",
