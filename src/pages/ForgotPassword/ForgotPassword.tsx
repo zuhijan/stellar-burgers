@@ -4,13 +4,19 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
+import { authAPI } from "../../services/api/auth";
 
 interface IForgotPassword {}
 
 const ForgotPassword: FC<IForgotPassword> = (props) => {
+  const history = useHistory();
+  const location = useLocation();
   const [value, setValue] = React.useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const refreshToken = localStorage.getItem("refreshToken");
+
   const onIconClick = () => {
     setTimeout(() => {
       if (inputRef && inputRef.current) {
@@ -19,6 +25,31 @@ const ForgotPassword: FC<IForgotPassword> = (props) => {
     }, 0);
     alert("Icon Click Callback");
   };
+
+  const forgotPassword = async () => {
+    try {
+      await authAPI.forgotPassword({ email: value });
+      history.replace({
+        pathname: "/reset-password",
+        state: {
+          from: location,
+        },
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  if (refreshToken) {
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+        }}
+      />
+    );
+  }
+
   return (
     <div className={s.root}>
       <p className="text text_type_main-medium pt-6">Восстановление пароля </p>
@@ -36,9 +67,10 @@ const ForgotPassword: FC<IForgotPassword> = (props) => {
           size={"default"}
         />
       </div>
-      <Button type="primary" size="medium">
+      <Button onClick={forgotPassword} type="primary" size="medium">
         Восстановить
       </Button>
+
       <div className={"mt-10"}>
         <p className="text text_type_main-default text_color_inactive">
           Вспомнили пароль?{" "}

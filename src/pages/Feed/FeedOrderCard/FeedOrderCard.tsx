@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import s from "./FeedOrderCard.module.scss";
-import { orderType } from "../../../utils/data";
+import { orderType } from "../../../services/utils/data";
 import clsx from "clsx";
 interface IFeedOrderCard {
   order: orderType;

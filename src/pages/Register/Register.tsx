@@ -1,16 +1,26 @@
-import React, { FC } from "react";
-import { Link } from "react-router-dom";
+import React, { ChangeEvent, FC } from "react";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import s from "./Register.module.scss";
 import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { registerUser } from "../../services/store/authSlice";
+import { useDispatch } from "react-redux";
 
 interface IRegister {}
 
-const Register: FC<IRegister> = (props) => {
-  const [value, setValue] = React.useState("");
+const Register: FC<IRegister> = () => {
+  const history = useHistory();
+  const [form, setForm] = React.useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const dispatch = useDispatch();
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const refreshToken = localStorage.getItem("refreshToken");
+
   const onIconClick = () => {
     setTimeout(() => {
       if (inputRef && inputRef.current) {
@@ -19,6 +29,30 @@ const Register: FC<IRegister> = (props) => {
     }, 0);
     alert("Icon Click Callback");
   };
+
+  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setForm((prevState) => {
+      return { ...prevState, [e.target.name]: e.target.value };
+    });
+  };
+
+  const registerSubmit = () => {
+    dispatch(registerUser(form));
+    history.replace({
+      pathname: "/",
+    });
+  };
+
+  if (refreshToken) {
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+        }}
+      />
+    );
+  }
+
   return (
     <div className={s.root}>
       <p className="text text_type_main-medium pt-6">Регистрация </p>
@@ -26,8 +60,8 @@ const Register: FC<IRegister> = (props) => {
         <Input
           type={"text"}
           placeholder={"Имя"}
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
+          onChange={onChangeInput}
+          value={form.name}
           name={"name"}
           error={false}
           ref={inputRef}
@@ -38,9 +72,9 @@ const Register: FC<IRegister> = (props) => {
         <Input
           type={"email"}
           placeholder={"E-mail"}
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
-          name={"name"}
+          onChange={onChangeInput}
+          value={form.email}
+          name={"email"}
           error={false}
           ref={inputRef}
           onIconClick={onIconClick}
@@ -50,10 +84,10 @@ const Register: FC<IRegister> = (props) => {
         <Input
           type={"password"}
           placeholder={"Пароль"}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChangeInput}
           icon={"ShowIcon"}
-          value={value}
-          name={"name"}
+          value={form.password}
+          name={"password"}
           error={false}
           ref={inputRef}
           onIconClick={onIconClick}
@@ -61,7 +95,7 @@ const Register: FC<IRegister> = (props) => {
           size={"default"}
         />
       </div>
-      <Button type="primary" size="medium">
+      <Button onClick={registerSubmit} type="primary" size="medium">
         Зарегистрироваться
       </Button>
       <div className={"mt-10"}>

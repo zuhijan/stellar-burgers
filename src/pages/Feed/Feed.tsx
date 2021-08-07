@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import s from "./Feed.module.scss";
 import clsx from "clsx";
 import FeedOrderCard from "./FeedOrderCard/FeedOrderCard";
-import { ORDER_FEED } from "../../utils/data";
+import { ORDER_FEED } from "../../services/utils/data";
 
 interface IFeed {}
 

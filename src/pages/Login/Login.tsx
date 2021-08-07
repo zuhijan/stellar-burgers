@@ -1,16 +1,31 @@
-import React, { FC, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { ChangeEvent, useRef } from "react";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import s from "./Login.module.scss";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../services/store/authSlice";
 
-interface ILogin {}
+export interface ILocationState {
+  from: {
+    pathname: string;
+  };
+}
 
-const Login: FC<ILogin> = (props) => {
-  const [value, setValue] = React.useState("");
-  const inputRef = React.useRef<HTMLInputElement>(null);
+const Login = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { state } = useLocation<ILocationState>();
+  const [form, setForm] = React.useState({
+    email: "",
+    password: "",
+  });
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const onIconClick = () => {
     setTimeout(() => {
       if (inputRef && inputRef.current) {
@@ -19,6 +34,30 @@ const Login: FC<ILogin> = (props) => {
     }, 0);
     alert("Icon Click Callback");
   };
+
+  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setForm((prevState) => {
+      return { ...prevState, [e.target.name]: e.target.value };
+    });
+  };
+
+  const loginUserSubmit = () => {
+    dispatch(loginUser(form));
+    history.replace({
+      pathname: state?.from.pathname || "/",
+    });
+  };
+
+  if (refreshToken) {
+    return (
+      <Redirect
+        to={{
+          pathname: state?.from.pathname || "/",
+        }}
+      />
+    );
+  }
+
   return (
     <div className={s.root}>
       <p className="text text_type_main-medium pt-6">Вход </p>
@@ -26,9 +65,9 @@ const Login: FC<ILogin> = (props) => {
         <Input
           type={"email"}
           placeholder={"E-mail"}
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
-          name={"name"}
+          onChange={onChangeInput}
+          value={form.email}
+          name={"email"}
           error={false}
           ref={inputRef}
           onIconClick={onIconClick}
@@ -38,10 +77,10 @@ const Login: FC<ILogin> = (props) => {
         <Input
           type={"password"}
           placeholder={"Пароль"}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChangeInput}
           icon={"ShowIcon"}
-          value={value}
-          name={"name"}
+          value={form.password}
+          name={"password"}
           error={false}
           ref={inputRef}
           onIconClick={onIconClick}
@@ -49,7 +88,7 @@ const Login: FC<ILogin> = (props) => {
           size={"default"}
         />
       </div>
-      <Button type="primary" size="medium">
+      <Button onClick={loginUserSubmit} type="primary" size="medium">
         Войти
       </Button>
       <div className={"mt-10"}>
