@@ -3,7 +3,7 @@ import s from "./burgerIngredients.module.scss";
 import BurgerIngredientsContainer from "./BurgerIngredientsContainer/BurgerIngredientsContainer";
 import Tabs from "../Tabs/Tabs";
 import { useSelector } from "react-redux";
-import { RootState } from "../../services/store";
+import { TRootState } from "../../services/store/store";
 
 interface IBurgerIngredients {}
 
@@ -15,7 +15,7 @@ const BurgerIngredients: FC<IBurgerIngredients> = () => {
   const mainRef = useRef<any>();
   const sauceRef = useRef<any>();
 
-  const { ingredients } = useSelector((state: RootState) => state.ingredients);
+  const { ingredients } = useSelector((state: TRootState) => state.ingredients);
 
   const handleClickTab = useCallback((item) => {
     setCurrent(item);

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Modal from "../Modal/Modal";
 import { ReactComponent as DoneIcon } from "../../images/done.svg";
 import { useSelector } from "react-redux";
-import { RootState } from "../../services/store";
+import { TRootState } from "../../services/store/store";
 
 export type OrderType = {
   name: string;
@@ -20,7 +20,7 @@ export interface IOrderDetails {
 
 const OrderDetails: FC<IOrderDetails> = ({ onClose }) => {
   const order = useSelector(
-    (state: RootState) => state.order.order as OrderType
+    (state: TRootState) => state.order.order as OrderType
   );
   return (
     <Modal onClose={onClose}>

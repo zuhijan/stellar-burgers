@@ -1,23 +1,32 @@
-import React, { FC } from "react";
+import React from "react";
 import s from "./IngredientDetails.module.scss";
 import Modal from "../Modal/Modal";
-import { ingredientType } from "../../utils/data";
+import { setOpenedIngredient } from "../../services/store/ingredientsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { TRootState } from "../../services/store/store";
+import { useHistory } from "react-router-dom";
 
-export interface IIngredientDetails {
-  ingredient: ingredientType;
-  onClose(): void;
-}
+const IngredientDetails = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { openedIngredient } = useSelector(
+    (state: TRootState) => state.ingredients
+  );
 
-const IngredientDetails: FC<IIngredientDetails> = ({ ingredient, onClose }) => {
+  const handleClickClose = () => {
+    history.replace({ pathname: "/" });
+    dispatch(setOpenedIngredient({}));
+  };
+
   return (
-    <Modal title={"Детали ингредиента"} onClose={onClose}>
+    <Modal title={"Детали ингредиента"} onClose={handleClickClose}>
       <div className={s.ingredient}>
-        <img src={ingredient.image_large} alt={ingredient.name} />
+        <img src={openedIngredient.image_large} alt={openedIngredient.name} />
         <p
           style={{ textAlign: "center" }}
           className="text text_type_main-medium mt-4"
         >
-          {ingredient.name}
+          {openedIngredient.name}
         </p>
         <p
           style={{ textAlign: "center" }}

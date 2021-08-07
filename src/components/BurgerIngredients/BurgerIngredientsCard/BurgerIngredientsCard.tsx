@@ -1,23 +1,24 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import s from "./burgerIngredientsCard.module.scss";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
-import IngredientDetails from "../../IngredientDetails/IngredientDetails";
-import { ingredientType } from "../../../utils/data";
-import { RootState } from "../../../services/store";
+import { TIngredientType } from "../../../services/utils/data";
+import { TRootState } from "../../../services/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenedIngredient } from "../../../services/ingredientsSlice";
+import { setOpenedIngredient } from "../../../services/store/ingredientsSlice";
 import { useDrag } from "react-dnd";
+import { useHistory, useLocation } from "react-router-dom";
 
 interface IBurgerIngredientsCard {
-  ingredient: ingredientType;
+  ingredient: TIngredientType;
 }
 
 const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
-  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
   const { selectedIngredients } = useSelector(
-    (state: RootState) => state.ingredients
+    (state: TRootState) => state.ingredients
   );
 
   const [, ref] = useDrag({
@@ -27,12 +28,10 @@ const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
 
   const handleClickOpen = () => {
     dispatch(setOpenedIngredient(ingredient));
-    setOpen(true);
-  };
-
-  const handleClickClose = () => {
-    dispatch(setOpenedIngredient({}));
-    setOpen(false);
+    history.push({
+      pathname: "/ingredients/" + ingredient._id,
+      state: { background: location },
+    });
   };
 
   let countBun =
@@ -57,9 +56,6 @@ const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
         </div>
         <p className="m-1 text_type_main-default">{ingredient.name}</p>
       </div>
-      {open && (
-        <IngredientDetails ingredient={ingredient} onClose={handleClickClose} />
-      )}
     </>
   );
 };
