@@ -109,7 +109,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
             <ConstructorElement
               isLocked={true}
               type={"top"}
-              text={selectedIngredients.bun.name}
+              text={`${selectedIngredients.bun.name} (верх)`}
               price={selectedIngredients.bun.price}
               thumbnail={selectedIngredients.bun.image_mobile}
             />
@@ -129,7 +129,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
             <ConstructorElement
               isLocked={true}
               type={"bottom"}
-              text={selectedIngredients.bun.name}
+              text={`${selectedIngredients.bun.name} (низ)`}
               price={selectedIngredients.bun.price}
               thumbnail={selectedIngredients.bun.image_mobile}
             />
