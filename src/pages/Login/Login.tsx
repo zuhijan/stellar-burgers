@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, FormEventHandler, useRef } from "react";
+import React, { ChangeEvent, FormEvent, useRef } from "react";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import {
   Button,
@@ -41,9 +41,9 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    dispatch(loginUser(form));
+    await dispatch(loginUser(form));
     history.replace({
       pathname: state?.from.pathname || "/",
     });

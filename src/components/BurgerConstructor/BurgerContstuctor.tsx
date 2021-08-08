@@ -10,7 +10,10 @@ import OrderDetails from "../OrderDetails/OrderDetails";
 import { cleanOrder, fetchOrder } from "../../services/store/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../../services/store/store";
-import { addSelectedIngredient } from "../../services/store/ingredientsSlice";
+import {
+  addSelectedIngredient,
+  cleanBasket,
+} from "../../services/store/ingredientsSlice";
 import { useDrop } from "react-dnd";
 import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
 import { useHistory, useLocation } from "react-router-dom";
@@ -19,7 +22,10 @@ import { authAPI } from "../../services/api/auth";
 interface IBurgerConstructor {}
 
 const BurgerConstructor: FC<IBurgerConstructor> = () => {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
+  const [isShowLoader, setShowLoader] = useState(false);
   const history = useHistory();
   const location = useLocation();
   const refreshToken = localStorage.getItem("refreshToken");
@@ -27,7 +33,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const { selectedIngredients } = useSelector(
     (state: TRootState) => state.ingredients
   );
-  const dispatch = useDispatch();
 
   const [{ isHover }, ref] = useDrop({
     accept: "ingredients",
@@ -59,19 +64,24 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickButton = async () => {
     if (selectedIngredients.bun) {
-      try {
-        await authAPI.updateToken({
-          token: refreshToken as string,
-        });
+      // try {
+      //   await authAPI.updateToken({
+      //     token: refreshToken as string,
+      //   });
+
+      if (refreshToken) {
+        setShowLoader(true);
 
         try {
           await dispatch(fetchOrder(idArray));
           setOpen(true);
+          dispatch(cleanBasket());
+          setShowLoader(false);
         } catch (err) {
+          setShowLoader(false);
           console.log(err);
         }
-      } catch (err) {
-        console.log(`### err`, err);
+      } else {
         history.replace({
           pathname: "/login",
           state: { from: location },
@@ -142,7 +152,15 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
               <CurrencyIcon type="primary" />
             </div>
             <Button type="primary" size="large" onClick={handleClickButton}>
-              Оформить заказ
+              <div
+                style={{ position: "relative", minWidth: 134, minHeight: 24 }}
+              >
+                {isShowLoader ? (
+                  <span className={s.loader} />
+                ) : (
+                  "Оформить заказ"
+                )}
+              </div>
             </Button>
           </div>
         </div>

@@ -7,18 +7,14 @@ import {
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { authAPI } from "../../services/api/auth";
 import { ILocationState } from "../Login/Login";
-import { useSelector } from "react-redux";
-import { TRootState } from "../../services/store/store";
 
-interface IResetPassword {}
-
-const ResetPassword: FC<IResetPassword> = (props) => {
+const ResetPassword = () => {
   const history = useHistory();
   const { state } = useLocation<ILocationState>();
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const { userData } = useSelector((state: TRootState) => state.auth);
+  const refreshToken = localStorage.getItem("refreshToken");
 
   const onIconClick = () => {
     setTimeout(() => {
@@ -41,7 +37,7 @@ const ResetPassword: FC<IResetPassword> = (props) => {
     }
   };
 
-  if (userData.email && userData.name) {
+  if (refreshToken) {
     return (
       <Redirect
         to={{

@@ -5,6 +5,8 @@ import {
   Logo,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link } from "react-router-dom";
+
 import s from "./AppHeader.module.scss";
 import AppHeaderItem from "./AppHeaderItem/AppHeaderItem";
 import clsx from "clsx";
@@ -36,7 +38,9 @@ const AppHeader: FC<IAppHeader> = ({ className }) => {
           />
         </nav>
         <div className={s.logo}>
-          <Logo />
+          <Link to={"/"}>
+            <Logo />
+          </Link>
         </div>
       </div>
     </header>

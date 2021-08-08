@@ -17,6 +17,8 @@ import ResetPassword from "../../pages/ResetPassword/ResetPassword";
 import NotFound from "../../pages/NotFound/NotFound";
 import ProtectedRoute from "../ProtectedRoute";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
+import { authAPI } from "../../services/api/auth";
+import { deleteCookie, setCookie } from "../../services/utils/cookie";
 
 export type IngredientsDataType = {
   bun: TIngredientType[];
@@ -33,9 +35,28 @@ function App() {
   const dispatch = useDispatch();
   const location = useLocation<any>();
   const history = useHistory();
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  const checkToken = async () => {
+    try {
+      const res = await authAPI.updateToken({
+        token: refreshToken as string,
+      });
+      if (res.success) {
+        setCookie("token", res.accessToken, { expires: 1200 });
+        localStorage.setItem("refreshToken", res.refreshToken);
+      } else {
+        deleteCookie("token");
+        localStorage.removeItem("refreshToken");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchIngredients());
+    checkToken();
   }, [dispatch]);
 
   const background =

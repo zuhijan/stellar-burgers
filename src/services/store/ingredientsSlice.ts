@@ -63,6 +63,12 @@ export const ingredientsSlice = createSlice({
       console.log(`### newState`, newState);
       state.selectedIngredients = newState;
     },
+    cleanBasket: (state) => {
+      state.selectedIngredients = {
+        bun: null,
+        other: [],
+      } as SelectedIngredientsType;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchIngredients.fulfilled, (state, action) => {
@@ -77,6 +83,7 @@ export const {
   deleteSelectedIngredient,
   setOpenedIngredient,
   changePosition,
+  cleanBasket,
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;
