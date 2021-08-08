@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 
 import s from "./App.module.scss";
 import AppHeader from "../AppHeader/AppHeader";
 import { TIngredientType } from "../../services/utils/data";
-import { fetchIngredients } from "../../services/store/ingredientsSlice";
+import {
+  fetchIngredients,
+  setOpenedIngredient,
+} from "../../services/store/ingredientsSlice";
 
 import Main from "../../pages/Main/Main";
 import Login from "../../pages/Login/Login";
@@ -19,6 +22,10 @@ import ProtectedRoute from "../ProtectedRoute";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import { authAPI } from "../../services/api/auth";
 import { deleteCookie, setCookie } from "../../services/utils/cookie";
+import Modal from "../Modal/Modal";
+import OrderDetails from "../OrderDetails/OrderDetails";
+import { TRootState } from "../../services/store/store";
+import { cleanOrder } from "../../services/store/orderSlice";
 
 export type IngredientsDataType = {
   bun: TIngredientType[];
@@ -36,6 +43,7 @@ function App() {
   const location = useLocation<any>();
   const history = useHistory();
   const refreshToken = localStorage.getItem("refreshToken");
+  const { order } = useSelector((state: TRootState) => state.order);
 
   const checkToken = async () => {
     try {
@@ -59,6 +67,13 @@ function App() {
     checkToken();
   }, [dispatch]);
 
+  const handleCloseIngredient = () => {
+    dispatch(setOpenedIngredient({}));
+    history.replace({ pathname: "/" });
+  };
+  const handleCloseOrder = () => {
+    dispatch(cleanOrder());
+  };
   const background =
     history.action === "PUSH" && location.state && location.state.background;
 
@@ -94,10 +109,16 @@ function App() {
         </Route>
       </Switch>
       {background && (
-        <Route
-          path="/ingredients/:ingredientId"
-          children={<IngredientDetails />}
-        />
+        <Route path={"/ingredients/:ingredientId"}>
+          <Modal title={"Детали ингредиента"} onClose={handleCloseIngredient}>
+            <IngredientDetails />
+          </Modal>
+        </Route>
+      )}
+      {order?.order?.number && (
+        <Modal onClose={handleCloseOrder}>
+          <OrderDetails />
+        </Modal>
       )}
     </div>
   );

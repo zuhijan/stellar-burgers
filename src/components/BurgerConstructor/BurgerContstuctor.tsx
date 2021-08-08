@@ -17,14 +17,12 @@ import {
 import { useDrop } from "react-dnd";
 import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
 import { useHistory, useLocation } from "react-router-dom";
-import { authAPI } from "../../services/api/auth";
 
 interface IBurgerConstructor {}
 
 const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const dispatch = useDispatch();
 
-  const [open, setOpen] = useState(false);
   const [isShowLoader, setShowLoader] = useState(false);
   const history = useHistory();
   const location = useLocation();
@@ -74,7 +72,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
         try {
           await dispatch(fetchOrder(idArray));
-          setOpen(true);
           dispatch(cleanBasket());
           setShowLoader(false);
         } catch (err) {
@@ -90,11 +87,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
     } else {
       console.log(`Милорд, не хватает булок!`);
     }
-  };
-
-  const handleClickClose = () => {
-    setOpen(false);
-    dispatch(cleanOrder());
   };
 
   const totalBun = selectedIngredients.bun
@@ -169,8 +161,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
           Перетащите ингредиенты
         </p>
       )}
-
-      {open && <OrderDetails onClose={handleClickClose} />}
     </div>
   );
 };
