@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, FormEvent, FormEventHandler, useRef } from "react";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import {
   Button,
@@ -41,7 +41,8 @@ const Login = () => {
     });
   };
 
-  const loginUserSubmit = () => {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
     dispatch(loginUser(form));
     history.replace({
       pathname: state?.from.pathname || "/",
@@ -61,36 +62,39 @@ const Login = () => {
   return (
     <div className={s.root}>
       <p className="text text_type_main-medium pt-6">Вход </p>
-      <div className={"mb-6"} style={{ minWidth: 480 }}>
-        <Input
-          type={"email"}
-          placeholder={"E-mail"}
-          onChange={onChangeInput}
-          value={form.email}
-          name={"email"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />
-        <Input
-          type={"password"}
-          placeholder={"Пароль"}
-          onChange={onChangeInput}
-          icon={"ShowIcon"}
-          value={form.password}
-          name={"password"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />
-      </div>
-      <Button onClick={loginUserSubmit} type="primary" size="medium">
-        Войти
-      </Button>
+      <form className={s.form} onSubmit={handleSubmit}>
+        <div className={"mb-6"} style={{ minWidth: 480 }}>
+          <Input
+            type={"email"}
+            placeholder={"E-mail"}
+            onChange={onChangeInput}
+            value={form.email}
+            name={"email"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+          <Input
+            type={"password"}
+            placeholder={"Пароль"}
+            onChange={onChangeInput}
+            icon={"ShowIcon"}
+            value={form.password}
+            name={"password"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+        </div>
+        <Button type="primary" size="medium">
+          Войти
+        </Button>
+      </form>
+
       <div className={"mt-10"}>
         <p className="text text_type_main-default text_color_inactive">
           Вы — новый пользователь?{" "}

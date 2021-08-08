@@ -102,7 +102,6 @@ const authSlice = createSlice({
     });
     builder.addCase(getUser.fulfilled, (state, action) => {
       if (action.payload) {
-        console.log(`### action.payload`, action.payload);
         state.userData = action.payload.user;
       }
     });

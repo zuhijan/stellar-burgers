@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, FormEvent, useState } from "react";
 import s from "./ResetPassword.module.scss";
 import {
   Button,
@@ -29,7 +29,8 @@ const ResetPassword: FC<IResetPassword> = (props) => {
     alert("Icon Click Callback");
   };
 
-  const resetPassword = async () => {
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
     try {
       await authAPI.resetPassword({ password, token: code });
       history.replace({
@@ -39,7 +40,6 @@ const ResetPassword: FC<IResetPassword> = (props) => {
       console.log(`### err`, err);
     }
   };
-  console.log(`### state`, state);
 
   if (userData.email && userData.name) {
     return (
@@ -63,37 +63,39 @@ const ResetPassword: FC<IResetPassword> = (props) => {
   return (
     <div className={s.root}>
       <p className="text text_type_main-medium pt-6">Восстановление пароля </p>
-      <div className={"mb-6"} style={{ minWidth: 480 }}>
-        <Input
-          type={"password"}
-          placeholder={"Введите новый пароль"}
-          icon={"ShowIcon"}
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          name={"name"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />
+      <form className={s.form} onSubmit={handleSubmit}>
+        <div className={"mb-6"} style={{ minWidth: 480 }}>
+          <Input
+            type={"password"}
+            placeholder={"Введите новый пароль"}
+            icon={"ShowIcon"}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            name={"name"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
 
-        <Input
-          type={"text"}
-          placeholder={"Введите код из письма"}
-          onChange={(e) => setCode(e.target.value)}
-          value={code}
-          name={"name"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />
-      </div>
-      <Button onClick={resetPassword} type="primary" size="medium">
-        Сохранить
-      </Button>
+          <Input
+            type={"text"}
+            placeholder={"Введите код из письма"}
+            onChange={(e) => setCode(e.target.value)}
+            value={code}
+            name={"name"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+        </div>
+        <Button type="primary" size="medium">
+          Сохранить
+        </Button>
+      </form>
       <div className={"mt-10"}>
         <p className="text text_type_main-default text_color_inactive">
           Вспомнили пароль?{" "}

@@ -40,6 +40,7 @@ function App() {
 
   const background =
     history.action === "PUSH" && location.state && location.state.background;
+
   return (
     <div className={s.App}>
       <AppHeader />
@@ -60,7 +61,7 @@ function App() {
         <Route exact path={"/reset-password"}>
           <ResetPassword />
         </Route>
-        <ProtectedRoute exact path={"/profile"}>
+        <ProtectedRoute path={"/profile"}>
           <Profile />
         </ProtectedRoute>
         <Route exact path={"/ingredients/:ingredientId"}>

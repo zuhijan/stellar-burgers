@@ -13,7 +13,7 @@ interface IAppHeaderItem {
 const AppHeaderItem: FC<IAppHeaderItem> = ({ icon, text, to, className }) => {
   const match = useRouteMatch({
     path: to,
-    exact: true,
+    exact: to === "", // true только для "/"
   });
 
   return (

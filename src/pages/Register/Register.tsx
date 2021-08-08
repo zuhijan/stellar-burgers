@@ -36,7 +36,7 @@ const Register: FC<IRegister> = () => {
     });
   };
 
-  const registerSubmit = () => {
+  const handleSubmit = () => {
     dispatch(registerUser(form));
     history.replace({
       pathname: "/",
@@ -56,48 +56,50 @@ const Register: FC<IRegister> = () => {
   return (
     <div className={s.root}>
       <p className="text text_type_main-medium pt-6">Регистрация </p>
-      <div className={"mb-6"} style={{ minWidth: 480 }}>
-        <Input
-          type={"text"}
-          placeholder={"Имя"}
-          onChange={onChangeInput}
-          value={form.name}
-          name={"name"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />{" "}
-        <Input
-          type={"email"}
-          placeholder={"E-mail"}
-          onChange={onChangeInput}
-          value={form.email}
-          name={"email"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />
-        <Input
-          type={"password"}
-          placeholder={"Пароль"}
-          onChange={onChangeInput}
-          icon={"ShowIcon"}
-          value={form.password}
-          name={"password"}
-          error={false}
-          ref={inputRef}
-          onIconClick={onIconClick}
-          errorText={"Ошибка"}
-          size={"default"}
-        />
-      </div>
-      <Button onClick={registerSubmit} type="primary" size="medium">
-        Зарегистрироваться
-      </Button>
+      <form className={s.form} onSubmit={handleSubmit}>
+        <div className={"mb-6"} style={{ minWidth: 480 }}>
+          <Input
+            type={"text"}
+            placeholder={"Имя"}
+            onChange={onChangeInput}
+            value={form.name}
+            name={"name"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />{" "}
+          <Input
+            type={"email"}
+            placeholder={"E-mail"}
+            onChange={onChangeInput}
+            value={form.email}
+            name={"email"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+          <Input
+            type={"password"}
+            placeholder={"Пароль"}
+            onChange={onChangeInput}
+            icon={"ShowIcon"}
+            value={form.password}
+            name={"password"}
+            error={false}
+            ref={inputRef}
+            onIconClick={onIconClick}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+        </div>
+        <Button type="primary" size="medium">
+          Зарегистрироваться
+        </Button>
+      </form>
       <div className={"mt-10"}>
         <p className="text text_type_main-default text_color_inactive">
           Уже зарегистрированы?{" "}

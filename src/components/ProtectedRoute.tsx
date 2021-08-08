@@ -7,7 +7,7 @@ import { getUser } from "../services/store/authSlice";
 
 interface IProtectedRoute {
   children: ReactComponentElement<any>;
-  exact: boolean;
+  exact?: boolean;
   path: string;
 }
 
