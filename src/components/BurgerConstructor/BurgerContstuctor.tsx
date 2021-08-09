@@ -5,25 +5,32 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { cleanOrder, fetchOrder } from "../../services/orderSlice";
+import { cleanOrder, fetchOrder } from "../../services/store/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../services/store";
-import { addSelectedIngredient } from "../../services/ingredientsSlice";
-import { DropTargetMonitor, useDrop } from "react-dnd";
+import { TRootState } from "../../services/store/store";
+import {
+  addSelectedIngredient,
+  cleanBasket,
+} from "../../services/store/ingredientsSlice";
+import { useDrop } from "react-dnd";
 import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
+import { useHistory, useLocation } from "react-router-dom";
 
 interface IBurgerConstructor {}
 
 const BurgerConstructor: FC<IBurgerConstructor> = () => {
-  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const [isShowLoader, setShowLoader] = useState(false);
+  const history = useHistory();
+  const location = useLocation();
+  const refreshToken = localStorage.getItem("refreshToken");
 
   const { selectedIngredients } = useSelector(
-    (state: RootState) => state.ingredients
+    (state: TRootState) => state.ingredients
   );
-  const dispatch = useDispatch();
 
   const [{ isHover }, ref] = useDrop({
     accept: "ingredients",
@@ -55,16 +62,31 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickButton = async () => {
     if (selectedIngredients.bun) {
-      await dispatch(fetchOrder(idArray));
-      setOpen(true);
+      // try {
+      //   await authAPI.updateToken({
+      //     token: refreshToken as string,
+      //   });
+
+      if (refreshToken) {
+        setShowLoader(true);
+
+        try {
+          await dispatch(fetchOrder(idArray));
+          dispatch(cleanBasket());
+          setShowLoader(false);
+        } catch (err) {
+          setShowLoader(false);
+          console.log(err);
+        }
+      } else {
+        history.replace({
+          pathname: "/login",
+          state: { from: location },
+        });
+      }
     } else {
       console.log(`Милорд, не хватает булок!`);
     }
-  };
-
-  const handleClickClose = () => {
-    setOpen(false);
-    dispatch(cleanOrder());
   };
 
   const totalBun = selectedIngredients.bun
@@ -89,7 +111,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
             <ConstructorElement
               isLocked={true}
               type={"top"}
-              text={selectedIngredients.bun.name}
+              text={`${selectedIngredients.bun.name} (верх)`}
               price={selectedIngredients.bun.price}
               thumbnail={selectedIngredients.bun.image_mobile}
             />
@@ -109,7 +131,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
             <ConstructorElement
               isLocked={true}
               type={"bottom"}
-              text={selectedIngredients.bun.name}
+              text={`${selectedIngredients.bun.name} (низ)`}
               price={selectedIngredients.bun.price}
               thumbnail={selectedIngredients.bun.image_mobile}
             />
@@ -122,7 +144,15 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
               <CurrencyIcon type="primary" />
             </div>
             <Button type="primary" size="large" onClick={handleClickButton}>
-              Оформить заказ
+              <div
+                style={{ position: "relative", minWidth: 134, minHeight: 24 }}
+              >
+                {isShowLoader ? (
+                  <span className={s.loader} />
+                ) : (
+                  "Оформить заказ"
+                )}
+              </div>
             </Button>
           </div>
         </div>
@@ -131,8 +161,6 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
           Перетащите ингредиенты
         </p>
       )}
-
-      {open && <OrderDetails onClose={handleClickClose} />}
     </div>
   );
 };

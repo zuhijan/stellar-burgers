@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.content {
+  display: flex;
+}
+
+.buttonLine {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.exit {
+  &:hover {
+    color: #fff;
+    cursor: pointer;
+  }
+}

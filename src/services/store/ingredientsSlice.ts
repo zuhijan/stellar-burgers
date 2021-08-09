@@ -1,22 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-  API_URL,
-  IngredientDataType,
+  IngredientsDataType,
   SelectedIngredientsType,
-} from "../components/App/App";
+} from "../../components/App/App";
 import formatDataIngredients from "../utils/formatDataIngredients";
-import { addEl, deleteEl } from "../components/App/utils";
+import { addEl, deleteEl } from "../../components/App/utils";
+import { constructorAPI } from "../api/constructor";
+import { TIngredientType } from "../utils/data";
 
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
   async () => {
     try {
-      const response = await fetch(API_URL + "/ingredients");
-      if (!response.ok) {
-        throw new Error("Ответ сети был не ok.");
-      }
-      const ingredients = await response.json();
-      return ingredients.data;
+      return await constructorAPI.getIngredients();
     } catch (err) {
       console.log(`### err.message`, err.message);
     }
@@ -30,12 +26,12 @@ export const ingredientsSlice = createSlice({
       main: [],
       bun: [],
       sauce: [],
-    } as IngredientDataType,
+    } as IngredientsDataType,
     selectedIngredients: {
       bun: null,
       other: [],
     } as SelectedIngredientsType,
-    openedIngredient: {},
+    openedIngredient: {} as TIngredientType,
     order: [],
     orderNumber: null,
   },
@@ -57,7 +53,6 @@ export const ingredientsSlice = createSlice({
     },
     changePosition: (state, action) => {
       let newState = { ...state.selectedIngredients };
-      let dragItem = newState.other[action.payload.dragIndex];
       const { dragIndex, dropIndex } = action.payload;
 
       newState.other.splice(
@@ -67,6 +62,12 @@ export const ingredientsSlice = createSlice({
       );
       console.log(`### newState`, newState);
       state.selectedIngredients = newState;
+    },
+    cleanBasket: (state) => {
+      state.selectedIngredients = {
+        bun: null,
+        other: [],
+      } as SelectedIngredientsType;
     },
   },
   extraReducers: (builder) => {
@@ -82,6 +83,7 @@ export const {
   deleteSelectedIngredient,
   setOpenedIngredient,
   changePosition,
+  cleanBasket,
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

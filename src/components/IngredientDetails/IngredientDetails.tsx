@@ -1,33 +1,30 @@
-import React, { FC } from "react";
+import React from "react";
 import s from "./IngredientDetails.module.scss";
-import Modal from "../Modal/Modal";
-import { ingredientType } from "../../utils/data";
+import { useSelector } from "react-redux";
+import { TRootState } from "../../services/store/store";
 
-export interface IIngredientDetails {
-  ingredient: ingredientType;
-  onClose(): void;
-}
+const IngredientDetails = () => {
+  const { openedIngredient } = useSelector(
+    (state: TRootState) => state.ingredients
+  );
 
-const IngredientDetails: FC<IIngredientDetails> = ({ ingredient, onClose }) => {
   return (
-    <Modal title={"Детали ингредиента"} onClose={onClose}>
-      <div className={s.ingredient}>
-        <img src={ingredient.image_large} alt={ingredient.name} />
-        <p
-          style={{ textAlign: "center" }}
-          className="text text_type_main-medium mt-4"
-        >
-          {ingredient.name}
-        </p>
-        <p
-          style={{ textAlign: "center" }}
-          className="text text_type_main-default mt-8"
-        >
-          Превосходные котлеты из марсианской Магнолии для фирменных космических
-          бургеров, набирающих популярность по всей вселенной.
-        </p>
-      </div>
-    </Modal>
+    <div className={s.ingredient}>
+      <img src={openedIngredient.image_large} alt={openedIngredient.name} />
+      <p
+        style={{ textAlign: "center" }}
+        className="text text_type_main-medium mt-4"
+      >
+        {openedIngredient.name}
+      </p>
+      <p
+        style={{ textAlign: "center" }}
+        className="text text_type_main-default mt-8"
+      >
+        Превосходные котлеты из марсианской Магнолии для фирменных космических
+        бургеров, набирающих популярность по всей вселенной.
+      </p>
+    </div>
   );
 };
 export default IngredientDetails;

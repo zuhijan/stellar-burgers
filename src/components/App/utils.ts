@@ -1,9 +1,9 @@
-import { ingredientType } from "../../utils/data";
+import { TIngredientType } from "../../services/utils/data";
 import { SelectedIngredientsType } from "./App";
 
 export const addEl = (
   state: SelectedIngredientsType,
-  ingredient: ingredientType
+  ingredient: TIngredientType
 ) => {
   if (ingredient.type === "bun") {
     const newState = { ...state, bun: ingredient };

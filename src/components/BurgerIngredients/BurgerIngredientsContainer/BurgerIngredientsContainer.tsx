@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import BurgerIngredientsCard from "../BurgerIngredientsCard/BurgerIngredientsCard";
-import { ingredientType } from "../../../utils/data";
+import { TIngredientType } from "../../../services/utils/data";
 import clsx from "clsx";
 import s from "./burgerIngredientsContainer.module.scss";
 
 export interface IBurgerIngredientsContainer {
-  data: ingredientType[];
+  data: TIngredientType[];
   title: string;
   customRef: any;
 }

@@ -1,26 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API_URL } from "../components/App/App";
-import { OrderType } from "../components/OrderDetails/OrderDetails";
+import { OrderType } from "../../components/OrderDetails/OrderDetails";
+import { constructorAPI } from "../api/constructor";
 
 export const fetchOrder = createAsyncThunk(
   "order/fetchOrder",
   async (idArray: string[]) => {
     try {
-      const res = await fetch(API_URL + "/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ingredients: idArray,
-        }),
-      });
-      if (!res.ok) {
-        throw new Error("Ответ сети был не ok.");
-      }
-      const order = await res.json();
-      console.log(`### order`, order);
-      return order;
+      return await constructorAPI.postOrder({ ingredients: idArray });
     } catch (err) {
       console.log(`### err.message`, err.message);
     }

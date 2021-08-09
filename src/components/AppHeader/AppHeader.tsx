@@ -5,6 +5,8 @@ import {
   Logo,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link } from "react-router-dom";
+
 import s from "./AppHeader.module.scss";
 import AppHeaderItem from "./AppHeaderItem/AppHeaderItem";
 import clsx from "clsx";
@@ -19,22 +21,26 @@ const AppHeader: FC<IAppHeader> = ({ className }) => {
       <div className={clsx(s.content, "content-wrapper")}>
         <nav className={s.navigation}>
           <AppHeaderItem
-            selected
             text={"Конструктор"}
             icon={<BurgerIcon type="primary" />}
+            to={""}
           />
           <AppHeaderItem
             text={"Лента заказов"}
             icon={<ListIcon type="primary" />}
+            to={"/feed"}
           />
           <AppHeaderItem
             className={s.flexEnd}
             text={"Личный кабинет"}
             icon={<ProfileIcon type="primary" />}
+            to={"/profile"}
           />
         </nav>
         <div className={s.logo}>
-          <Logo />
+          <Link to={"/"}>
+            <Logo />
+          </Link>
         </div>
       </div>
     </header>
