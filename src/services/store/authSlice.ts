@@ -50,7 +50,6 @@ export const registerUser = createAsyncThunk<
   try {
     const data = await authAPI.registerUser(form);
     console.log(`### data`, data);
-    //TODO: время жизни куки нужно обновлять, если пользователь активен. в getUser?
     setCookie("token", data.accessToken, { expires: 1200 });
     localStorage.setItem("refreshToken", data.refreshToken);
     return data;
@@ -90,7 +89,9 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.userData = action.payload.user;
+      if (action.payload) {
+        state.userData = action.payload.user;
+      }
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       if (action.payload) {

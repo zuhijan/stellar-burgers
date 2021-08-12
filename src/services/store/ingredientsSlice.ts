@@ -6,7 +6,21 @@ import {
 import formatDataIngredients from "../utils/formatDataIngredients";
 import { addEl, deleteEl } from "../../components/App/utils";
 import { constructorAPI } from "../api/constructor";
-import { TIngredientType } from "../utils/data";
+
+export type TIngredient = {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+};
 
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
@@ -31,7 +45,6 @@ export const ingredientsSlice = createSlice({
       bun: null,
       other: [],
     } as SelectedIngredientsType,
-    openedIngredient: {} as TIngredientType,
     order: [],
     orderNumber: null,
   },
@@ -47,9 +60,6 @@ export const ingredientsSlice = createSlice({
         state.selectedIngredients,
         action.payload.index
       );
-    },
-    setOpenedIngredient: (state, action) => {
-      state.openedIngredient = action.payload;
     },
     changePosition: (state, action) => {
       let newState = { ...state.selectedIngredients };
@@ -81,7 +91,6 @@ export const ingredientsSlice = createSlice({
 export const {
   addSelectedIngredient,
   deleteSelectedIngredient,
-  setOpenedIngredient,
   changePosition,
   cleanBasket,
 } = ingredientsSlice.actions;
