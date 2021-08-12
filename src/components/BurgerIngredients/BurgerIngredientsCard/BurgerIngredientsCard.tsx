@@ -2,20 +2,19 @@ import React, { FC } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import s from "./burgerIngredientsCard.module.scss";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
-import { TIngredientType } from "../../../services/utils/data";
 import { TRootState } from "../../../services/store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setOpenedIngredient } from "../../../services/store/ingredientsSlice";
+import { useSelector } from "react-redux";
+import { TIngredient } from "../../../services/store/ingredientsSlice";
 import { useDrag } from "react-dnd";
 import { useHistory, useLocation } from "react-router-dom";
 
 interface IBurgerIngredientsCard {
-  ingredient: TIngredientType;
+  ingredient: TIngredient;
 }
 
 const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
-  const dispatch = useDispatch();
   const history = useHistory();
+
   const location = useLocation();
   const { selectedIngredients } = useSelector(
     (state: TRootState) => state.ingredients
@@ -27,7 +26,6 @@ const BurgerIngredientsCard: FC<IBurgerIngredientsCard> = ({ ingredient }) => {
   });
 
   const handleClickOpen = () => {
-    dispatch(setOpenedIngredient(ingredient));
     history.push({
       pathname: "/ingredients/" + ingredient._id,
       state: { background: location },

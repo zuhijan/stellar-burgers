@@ -7,14 +7,14 @@ import {
 import {
   changePosition,
   deleteSelectedIngredient,
+  TIngredient,
 } from "../../services/store/ingredientsSlice";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
-import { TIngredientType } from "../../services/utils/data";
 import { XYCoord } from "dnd-core";
 
 interface IBurgerConstructorDragElement {
-  ingredient: TIngredientType;
+  ingredient: TIngredient;
   index: number;
 }
 

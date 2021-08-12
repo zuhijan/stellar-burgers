@@ -6,8 +6,7 @@ import {
   ConstructorElement,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import OrderDetails from "../OrderDetails/OrderDetails";
-import { cleanOrder, fetchOrder } from "../../services/store/orderSlice";
+import { postOrder } from "../../services/store/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../../services/store/store";
 import {
@@ -62,16 +61,11 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
 
   const handleClickButton = async () => {
     if (selectedIngredients.bun) {
-      // try {
-      //   await authAPI.updateToken({
-      //     token: refreshToken as string,
-      //   });
-
       if (refreshToken) {
         setShowLoader(true);
 
         try {
-          await dispatch(fetchOrder(idArray));
+          await dispatch(postOrder(idArray));
           dispatch(cleanBasket());
           setShowLoader(false);
         } catch (err) {

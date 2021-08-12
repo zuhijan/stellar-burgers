@@ -5,20 +5,12 @@ import { ReactComponent as DoneIcon } from "../../images/done.svg";
 import { useSelector } from "react-redux";
 import { TRootState } from "../../services/store/store";
 
-export type OrderType = {
-  name: string;
-  order: {
-    number: number;
-  };
-  success: boolean;
-};
-
 const OrderDetails = () => {
-  const { order } = useSelector((state: TRootState) => state.order);
+  const { orderMade } = useSelector((state: TRootState) => state.order);
   return (
     <div className={s.order}>
       <p className="text text_type_digits-large">
-        {order.order && order.order.number}
+        {orderMade.order && orderMade.order.number}
       </p>
       <p className="text text_type_main-medium mt-8">идентификатор заказа</p>
       <DoneIcon className="m-15" />
