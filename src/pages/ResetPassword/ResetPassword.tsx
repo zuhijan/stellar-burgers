@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import s from "./ResetPassword.module.scss";
 import {
   Button,
