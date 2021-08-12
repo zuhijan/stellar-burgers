@@ -1,9 +1,9 @@
-import { TIngredientType } from "./data";
+import { TIngredient } from "../store/ingredientsSlice";
 
-const formatData = (arr: TIngredientType[]) => {
-  let mainArr: TIngredientType[] = [];
-  let sauceArr: TIngredientType[] = [];
-  let bunArr: TIngredientType[] = [];
+const formatData = (arr: TIngredient[]) => {
+  let mainArr: TIngredient[] = [];
+  let sauceArr: TIngredient[] = [];
+  let bunArr: TIngredient[] = [];
 
   arr.forEach((item) => {
     if (item.type === "bun") bunArr.push(item);
