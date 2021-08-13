@@ -41,8 +41,10 @@ export const postOrder = createAsyncThunk(
   }
 );
 
-export const WS_CONNECTION_START = createAction<string>("WS_CONNECTION_START");
-export const WS_CONNECTION_CLOSE = createAction("WS_CONNECTION_CLOSE");
+export const wsConnectionStart = createAction<string>(
+  "order/wsConnectionStart"
+);
+export const wsConnectionClose = createAction("order/wsConnectionClose");
 
 export const orderSlice = createSlice({
   name: "order",
@@ -57,6 +59,9 @@ export const orderSlice = createSlice({
   reducers: {
     cleanOrderMade: (state) => {
       state.orderMade = {} as TOrderMade;
+    },
+    cleanOrders: (state) => {
+      state.orders = [] as TWSOrder[];
     },
     wsConnectionOpened: (state) => {
       state.wsConnected = true;

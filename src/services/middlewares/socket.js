@@ -1,6 +1,6 @@
 import {
-  WS_CONNECTION_CLOSE,
-  WS_CONNECTION_START,
+  wsConnectionClose,
+  wsConnectionStart,
   wsClosed,
   wsConnectionOpened,
   wsGotError,
@@ -14,9 +14,9 @@ export const socketMiddleware = () => {
     return (next) => (action) => {
       const { type, payload } = action;
 
-      if (type === WS_CONNECTION_START.toString())
+      if (type === wsConnectionStart.toString())
         socket = new WebSocket(payload);
-      if (type === WS_CONNECTION_CLOSE.toString()) socket.close();
+      if (type === wsConnectionClose.toString()) socket.close();
 
       if (socket) {
         socket.onopen = () => dispatch(wsConnectionOpened());

@@ -115,7 +115,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
             {selectedIngredients.other &&
               selectedIngredients.other.map((item, index) => (
                 <BurgerConstructorDragElement
-                  key={index}
+                  key={item._id}
                   ingredient={item}
                   index={index}
                 />

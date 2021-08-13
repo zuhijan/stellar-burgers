@@ -5,8 +5,8 @@ import FeedOrderCard from "./FeedOrderCard/FeedOrderCard";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   TWSOrder,
-  WS_CONNECTION_CLOSE,
-  WS_CONNECTION_START,
+  wsConnectionClose,
+  wsConnectionStart,
 } from "../../services/store/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../../services/store/store";
@@ -23,9 +23,9 @@ const Feed = () => {
   );
 
   useEffect(() => {
-    dispatch(WS_CONNECTION_START(ALL_ORDERS_URL));
+    dispatch(wsConnectionStart(ALL_ORDERS_URL));
     return () => {
-      dispatch(WS_CONNECTION_CLOSE());
+      dispatch(wsConnectionClose());
     };
   }, [dispatch]);
 

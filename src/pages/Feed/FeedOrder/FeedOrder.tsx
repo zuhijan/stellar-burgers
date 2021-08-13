@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../../../services/store/store";
 import { findIngredient } from "../../../services/utils/findIngredient";
 import {
-  WS_CONNECTION_CLOSE,
-  WS_CONNECTION_START,
+  wsConnectionClose,
+  wsConnectionStart,
 } from "../../../services/store/orderSlice";
 import { ALL_ORDERS_URL } from "../Feed";
 import { formatDate } from "../../../services/utils/formatDate";
@@ -34,9 +34,9 @@ const FeedOrder = () => {
   useEffect(() => {
     if (!order?.number) {
       console.log(`### checkEffect`);
-      dispatch(WS_CONNECTION_START(ALL_ORDERS_URL));
+      dispatch(wsConnectionStart(ALL_ORDERS_URL));
       return () => {
-        dispatch(WS_CONNECTION_CLOSE());
+        dispatch(wsConnectionClose());
       };
     }
   }, [dispatch]);

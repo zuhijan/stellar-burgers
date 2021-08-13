@@ -4,8 +4,8 @@ import s from "./ProfileHistory.module.scss";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   TWSOrder,
-  WS_CONNECTION_CLOSE,
-  WS_CONNECTION_START,
+  wsConnectionClose,
+  wsConnectionStart,
 } from "../../../services/store/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../../../services/store/store";
@@ -22,9 +22,9 @@ const ProfileHistory = () => {
 
   useEffect(() => {
     const accessToken = getCookie("token")?.split(" ")[1];
-    dispatch(WS_CONNECTION_START(USER_ORDERS_URL + `?token=${accessToken}`));
+    dispatch(wsConnectionStart(USER_ORDERS_URL + `?token=${accessToken}`));
     return () => {
-      dispatch(WS_CONNECTION_CLOSE());
+      dispatch(wsConnectionClose());
     };
   }, [dispatch]);
 

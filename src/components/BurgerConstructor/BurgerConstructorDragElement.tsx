@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import s from "./burgerConstructor.module.scss";
 import {
   ConstructorElement,
@@ -38,10 +38,10 @@ const BurgerConstructorDragElement: FC<IBurgerConstructorDragElement> = ({
       }
 
       const dragIndex = item.index;
-      const dropIndex = index;
+      const hoverIndex = index;
 
       // Don't replace items with themselves
-      if (dragIndex === dropIndex) {
+      if (dragIndex === hoverIndex) {
         return;
       }
       // Determine rectangle on screen
@@ -62,22 +62,22 @@ const BurgerConstructorDragElement: FC<IBurgerConstructorDragElement> = ({
       // When dragging upwards, only move when the cursor is above 50%
 
       // Dragging downwards
-      if (dragIndex < dropIndex && hoverClientY < hoverMiddleY) {
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
       // Dragging upwards
-      if (dragIndex > dropIndex && hoverClientY > hoverMiddleY) {
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
 
       // Time to actually perform the action
-      dispatch(changePosition({ dragIndex, dropIndex }));
+      dispatch(changePosition({ dragIndex, hoverIndex }));
 
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
       // but it's good here for the sake of performance
       // to avoid expensive index searches.
-      item.index = dropIndex;
+      item.index = hoverIndex;
     },
   });
 
@@ -98,7 +98,9 @@ const BurgerConstructorDragElement: FC<IBurgerConstructorDragElement> = ({
   return (
     <div
       className={s.lineElement}
-      style={{ opacity: opacity }}
+      style={{
+        opacity: opacity,
+      }}
       // @ts-ignore
       ref={ref}
       data-handler-id={handlerId}
