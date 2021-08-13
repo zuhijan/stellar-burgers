@@ -4,6 +4,7 @@ import clsx from "clsx";
 import FeedOrderCard from "./FeedOrderCard/FeedOrderCard";
 import { useHistory, useLocation } from "react-router-dom";
 import {
+  cleanOrders,
   TWSOrder,
   wsConnectionClose,
   wsConnectionStart,
@@ -26,6 +27,7 @@ const Feed = () => {
     dispatch(wsConnectionStart(ALL_ORDERS_URL));
     return () => {
       dispatch(wsConnectionClose());
+      dispatch(cleanOrders());
     };
   }, [dispatch]);
 

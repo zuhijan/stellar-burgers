@@ -104,7 +104,7 @@ function App() {
             <ResetPassword />
           </Route>
           <ProtectedRoute exact path={"/profile/orders/:orderId"}>
-            <FeedOrder />
+            <FeedOrder profile={true} />
           </ProtectedRoute>
           <ProtectedRoute path={"/profile"}>
             <Profile />

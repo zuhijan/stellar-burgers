@@ -3,6 +3,7 @@ import FeedOrderCard from "../../Feed/FeedOrderCard/FeedOrderCard";
 import s from "./ProfileHistory.module.scss";
 import { useHistory, useLocation } from "react-router-dom";
 import {
+  cleanOrders,
   TWSOrder,
   wsConnectionClose,
   wsConnectionStart,
@@ -20,11 +21,13 @@ const ProfileHistory = () => {
 
   const { orders } = useSelector((state: TRootState) => state.order);
 
+  console.log(`### ordersProfileHistory`, orders);
   useEffect(() => {
     const accessToken = getCookie("token")?.split(" ")[1];
     dispatch(wsConnectionStart(USER_ORDERS_URL + `?token=${accessToken}`));
     return () => {
       dispatch(wsConnectionClose());
+      dispatch(cleanOrders());
     };
   }, [dispatch]);
 

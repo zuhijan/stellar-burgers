@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import s from "./FeedOrder.module.scss";
 import clsx from "clsx";
@@ -7,11 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../../../services/store/store";
 import { findIngredient } from "../../../services/utils/findIngredient";
 import {
+  cleanOrders,
   wsConnectionClose,
   wsConnectionStart,
 } from "../../../services/store/orderSlice";
 import { ALL_ORDERS_URL } from "../Feed";
 import { formatDate } from "../../../services/utils/formatDate";
+import { getCookie } from "../../../services/utils/cookie";
+import { USER_ORDERS_URL } from "../../Profile/ProfileHistory/ProfileHistory";
 
 export enum enumStatusOrder {
   created = "Создан",
@@ -23,7 +26,11 @@ const unique = (arr: string[]) => {
   return Array.from(new Set(arr));
 };
 
-const FeedOrder = () => {
+interface IFeedOrder {
+  profile?: boolean;
+}
+
+const FeedOrder: FC<IFeedOrder> = ({ profile }) => {
   const dispatch = useDispatch();
   const { orderId } = useParams<{ orderId: string }>();
   const { orders } = useSelector((state: TRootState) => state.order);
@@ -34,9 +41,15 @@ const FeedOrder = () => {
   useEffect(() => {
     if (!order?.number) {
       console.log(`### checkEffect`);
-      dispatch(wsConnectionStart(ALL_ORDERS_URL));
+      if (profile) {
+        const accessToken = getCookie("token")?.split(" ")[1];
+        dispatch(wsConnectionStart(USER_ORDERS_URL + `?token=${accessToken}`));
+      } else {
+        dispatch(wsConnectionStart(ALL_ORDERS_URL));
+      }
       return () => {
         dispatch(wsConnectionClose());
+        dispatch(cleanOrders());
       };
     }
   }, [dispatch]);

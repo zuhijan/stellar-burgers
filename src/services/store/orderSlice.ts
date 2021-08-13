@@ -96,6 +96,7 @@ export const {
   wsConnectionOpened,
   wsGotError,
   wsGotMessage,
+  cleanOrders,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
