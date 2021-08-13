@@ -4,11 +4,6 @@ import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 
 import s from "./App.module.scss";
 import AppHeader from "../AppHeader/AppHeader";
-import { TIngredientType } from "../../services/utils/data";
-import {
-  fetchIngredients,
-  setOpenedIngredient,
-} from "../../services/store/ingredientsSlice";
 
 import Main from "../../pages/Main/Main";
 import Login from "../../pages/Login/Login";
@@ -19,23 +14,28 @@ import Ingredients from "../../pages/Ingredients/Ingredients";
 import ResetPassword from "../../pages/ResetPassword/ResetPassword";
 import NotFound from "../../pages/NotFound/NotFound";
 import ProtectedRoute from "../ProtectedRoute";
-import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import { authAPI } from "../../services/api/auth";
 import { deleteCookie, setCookie } from "../../services/utils/cookie";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import { TRootState } from "../../services/store/store";
-import { cleanOrder } from "../../services/store/orderSlice";
+import { cleanOrderMade } from "../../services/store/orderSlice";
+import {
+  fetchIngredients,
+  TIngredient,
+} from "../../services/store/ingredientsSlice";
+import Feed from "../../pages/Feed/Feed";
+import FeedOrder from "../../pages/Feed/FeedOrder/FeedOrder";
 
 export type IngredientsDataType = {
-  bun: TIngredientType[];
-  sauce: TIngredientType[];
-  main: TIngredientType[];
+  bun: TIngredient[];
+  sauce: TIngredient[];
+  main: TIngredient[];
 };
 
 export type SelectedIngredientsType = {
-  bun: TIngredientType | null;
-  other: TIngredientType[];
+  bun: TIngredient | null;
+  other: TIngredient[];
 };
 
 function App() {
@@ -43,7 +43,7 @@ function App() {
   const location = useLocation<any>();
   const history = useHistory();
   const refreshToken = localStorage.getItem("refreshToken");
-  const { order } = useSelector((state: TRootState) => state.order);
+  const { orderMade } = useSelector((state: TRootState) => state.order);
 
   const checkToken = async () => {
     try {
@@ -68,11 +68,17 @@ function App() {
   }, [dispatch]);
 
   const handleCloseIngredient = () => {
-    dispatch(setOpenedIngredient({}));
     history.replace({ pathname: "/" });
   };
   const handleCloseOrder = () => {
-    dispatch(cleanOrder());
+    dispatch(cleanOrderMade());
+  };
+
+  const handleCloseOrderFeed = () => {
+    history.replace({ pathname: "/feed" });
+  };
+  const handleCloseProfileOrder = () => {
+    history.replace({ pathname: "/profile/orders" });
   };
   const background =
     history.action === "PUSH" && location.state && location.state.background;
@@ -80,46 +86,73 @@ function App() {
   return (
     <div className={s.App}>
       <AppHeader />
+      <div className="content-wrapper">
+        <Switch location={background || location}>
+          <Route exact path={"/login"}>
+            <Login />
+          </Route>
+          <Route exact path={"/"}>
+            <Main />
+          </Route>
+          <Route exact path={"/register"}>
+            <Register />
+          </Route>
+          <Route exact path={"/forgot-password"}>
+            <ForgotPassword />
+          </Route>
+          <Route exact path={"/reset-password"}>
+            <ResetPassword />
+          </Route>
+          <ProtectedRoute exact path={"/profile/orders/:orderId"}>
+            <FeedOrder profile={true} />
+          </ProtectedRoute>
+          <ProtectedRoute path={"/profile"}>
+            <Profile />
+          </ProtectedRoute>
 
-      <Switch location={background || location}>
-        <Route exact path={"/login"}>
-          <Login />
-        </Route>
-        <Route exact path={"/"}>
-          <Main />
-        </Route>
-        <Route exact path={"/register"}>
-          <Register />
-        </Route>
-        <Route exact path={"/forgot-password"}>
-          <ForgotPassword />
-        </Route>
-        <Route exact path={"/reset-password"}>
-          <ResetPassword />
-        </Route>
-        <ProtectedRoute path={"/profile"}>
-          <Profile />
-        </ProtectedRoute>
-        <Route exact path={"/ingredients/:ingredientId"}>
-          <Ingredients />
-        </Route>
+          <Route exact path={"/ingredients/:ingredientId"}>
+            <Ingredients />
+          </Route>
+          <Route exact path={"/feed"}>
+            <Feed />
+          </Route>
+          <Route exact path={"/feed/:orderId"}>
+            <FeedOrder />
+          </Route>
 
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
-      {background && (
-        <Route path={"/ingredients/:ingredientId"}>
-          <Modal title={"Детали ингредиента"} onClose={handleCloseIngredient}>
-            <IngredientDetails />
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+        {background && (
+          <>
+            <Route path={"/ingredients/:ingredientId"}>
+              <Modal
+                title={"Детали ингредиента"}
+                onClose={handleCloseIngredient}
+              >
+                <Ingredients />
+              </Modal>
+            </Route>
+            <Route exact path={"/feed/:orderId"}>
+              <Modal onClose={handleCloseOrderFeed}>
+                <FeedOrder />
+              </Modal>
+            </Route>
+            <Route exact path={"/profile/orders/:orderId"}>
+              <Modal onClose={handleCloseProfileOrder}>
+                <FeedOrder />
+              </Modal>
+            </Route>
+          </>
+        )}
+
+        {orderMade?.order?.number && (
+          <Modal onClose={handleCloseOrder}>
+            <OrderDetails />
           </Modal>
-        </Route>
-      )}
-      {order?.order?.number && (
-        <Modal onClose={handleCloseOrder}>
-          <OrderDetails />
-        </Modal>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -1,28 +1,15 @@
-import React, { FC } from "react";
+import React from "react";
 import s from "./Ingredients.module.scss";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { TRootState } from "../../services/store/store";
-import { TIngredientType } from "../../services/utils/data";
+import { findIngredient } from "../../services/utils/findIngredient";
 
-interface IIngredients {}
-
-const Ingredients: FC<IIngredients> = (props) => {
+const Ingredients = () => {
   const { ingredients } = useSelector((state: TRootState) => state.ingredients);
   const { ingredientId } = useParams<{ ingredientId?: string }>();
 
-  const findIngredient = () => {
-    let ingredient: TIngredientType | undefined;
-    for (let key in ingredients) {
-      if (!ingredient) {
-        const arrayIng: TIngredientType[] = ingredients[key as keyof object];
-        ingredient = arrayIng.find((item) => item._id === ingredientId);
-      }
-    }
-    return ingredient;
-  };
-
-  const ingredient = findIngredient();
+  const ingredient = findIngredient(ingredients, ingredientId!);
 
   return (
     <div className={s.ingredient}>

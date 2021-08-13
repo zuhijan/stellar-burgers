@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import ingredientsReducer from "./ingredientsSlice";
 import orderReducer from "./orderSlice";
 import authReducer from "./authSlice";
+import { socketMiddleware } from "../middlewares/socket";
 
 const store = configureStore({
   reducer: {
@@ -9,6 +10,8 @@ const store = configureStore({
     order: orderReducer,
     auth: authReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(socketMiddleware()),
   devTools: true,
 });
 

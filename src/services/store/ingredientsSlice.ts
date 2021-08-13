@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import {
   IngredientsDataType,
   SelectedIngredientsType,
@@ -6,7 +6,21 @@ import {
 import formatDataIngredients from "../utils/formatDataIngredients";
 import { addEl, deleteEl } from "../../components/App/utils";
 import { constructorAPI } from "../api/constructor";
-import { TIngredientType } from "../utils/data";
+
+export type TIngredient = {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+};
 
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
@@ -31,9 +45,6 @@ export const ingredientsSlice = createSlice({
       bun: null,
       other: [],
     } as SelectedIngredientsType,
-    openedIngredient: {} as TIngredientType,
-    order: [],
-    orderNumber: null,
   },
   reducers: {
     addSelectedIngredient: (state, action) => {
@@ -48,20 +59,20 @@ export const ingredientsSlice = createSlice({
         action.payload.index
       );
     },
-    setOpenedIngredient: (state, action) => {
-      state.openedIngredient = action.payload;
-    },
     changePosition: (state, action) => {
-      let newState = { ...state.selectedIngredients };
-      const { dragIndex, dropIndex } = action.payload;
+      const { dragIndex, hoverIndex } = action.payload;
+      const currentState = current(state);
+      let other = [...currentState.selectedIngredients.other];
 
-      newState.other.splice(
-        dragIndex,
-        0,
-        newState.other.splice(dropIndex, 1)[0]
-      );
-      console.log(`### newState`, newState);
-      state.selectedIngredients = newState;
+      const dragEl = other[dragIndex as keyof object];
+
+      other.splice(dragIndex, 1);
+      other.splice(hoverIndex, -1, dragEl);
+
+      state.selectedIngredients = {
+        ...currentState.selectedIngredients,
+        other: other,
+      };
     },
     cleanBasket: (state) => {
       state.selectedIngredients = {
@@ -81,7 +92,6 @@ export const ingredientsSlice = createSlice({
 export const {
   addSelectedIngredient,
   deleteSelectedIngredient,
-  setOpenedIngredient,
   changePosition,
   cleanBasket,
 } = ingredientsSlice.actions;

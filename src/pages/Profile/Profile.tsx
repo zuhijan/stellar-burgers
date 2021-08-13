@@ -1,18 +1,9 @@
-import React, { ChangeEvent } from "react";
-import {
-  Button,
-  Input,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
 import s from "./Profile.module.scss";
 import clsx from "clsx";
 import { Switch, Route, useHistory, useRouteMatch } from "react-router-dom";
-import { TRootState } from "../../services/store/store";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  patchUser,
-  setUserData,
-  TUserData,
-} from "../../services/store/authSlice";
+import { useDispatch } from "react-redux";
+import { setUserData, TUserData } from "../../services/store/authSlice";
 import { authAPI } from "../../services/api/auth";
 import { deleteCookie } from "../../services/utils/cookie";
 import ProfileForm from "./ProfileForm/ProfileForm";
@@ -41,10 +32,10 @@ const Profile = () => {
   };
   return (
     <div className={s.root}>
-      <div className={s.content}>
-        <div className={"mr-15"}>
+      <div className={clsx(s.content, "mt-30")}>
+        <div style={{ minWidth: 320 }} className={"mr-15"}>
           <ProfileLink text="Профиль" to="/profile" />
-          <ProfileLink text="История заказов" to="/profile/history" />
+          <ProfileLink text="История заказов" to="/profile/orders" />
 
           <p
             className={clsx(
@@ -60,7 +51,7 @@ const Profile = () => {
           <Route exact path={path}>
             <ProfileForm />
           </Route>
-          <Route exact path={`${path}/history`}>
+          <Route exact path={`${path}/orders`}>
             <ProfileHistory />
           </Route>
         </Switch>
