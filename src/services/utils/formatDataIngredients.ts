@@ -1,4 +1,4 @@
-import { TIngredient } from "../store/ingredientsSlice";
+import { TIngredient } from "../store/ingredients/ingredientsSlice";
 
 const formatData = (arr: TIngredient[]) => {
   let mainArr: TIngredient[] = [];

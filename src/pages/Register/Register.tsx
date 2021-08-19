@@ -5,7 +5,7 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { registerUser } from "../../services/store/authSlice";
+import { registerUser } from "../../services/store/auth/authSlice";
 import { useDispatch } from "react-redux";
 
 interface IRegister {}

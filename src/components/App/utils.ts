@@ -1,5 +1,5 @@
 import { SelectedIngredientsType } from "./App";
-import { TIngredient } from "../../services/store/ingredientsSlice";
+import { TIngredient } from "../../services/store/ingredients/ingredientsSlice";
 
 export const addEl = (
   state: SelectedIngredientsType,

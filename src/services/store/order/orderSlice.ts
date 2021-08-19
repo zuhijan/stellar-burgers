@@ -1,6 +1,6 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { constructorAPI } from "../api/constructor";
-import { TIngredient } from "./ingredientsSlice";
+import { constructorAPI } from "../../api/constructor";
+import { TIngredient } from "../ingredients/ingredientsSlice";
 
 export type TOrderMade = {
   name: string;
@@ -25,10 +25,18 @@ export type TWSOrder = {
   ingredients: string[];
   name: string;
   number: number;
-  price: number;
   status: string;
   updatedAt: string;
 };
+
+export interface IOrderState {
+  orderMade: TOrderMade;
+  orders: TWSOrder[];
+  total: number;
+  totalToday: number;
+  wsConnected: boolean;
+  wsError: null | string;
+}
 
 export const postOrder = createAsyncThunk(
   "order/postOrder",
@@ -46,16 +54,18 @@ export const wsConnectionStart = createAction<string>(
 );
 export const wsConnectionClose = createAction("order/wsConnectionClose");
 
+export const initialState = {
+  orderMade: {} as TOrderMade,
+  orders: [] as TWSOrder[],
+  total: 0,
+  totalToday: 0,
+  wsConnected: false,
+  wsError: null,
+};
+
 export const orderSlice = createSlice({
   name: "order",
-  initialState: {
-    orderMade: {} as TOrderMade,
-    orders: [] as TWSOrder[],
-    total: 0,
-    dailyTotal: 0,
-    wsConnected: false,
-    wsError: null,
-  },
+  initialState: initialState as IOrderState,
   reducers: {
     cleanOrderMade: (state) => {
       state.orderMade = {} as TOrderMade;
@@ -71,7 +81,7 @@ export const orderSlice = createSlice({
       const { orders, total, totalToday } = action.payload;
       state.orders = orders;
       state.total = total;
-      state.dailyTotal = totalToday;
+      state.totalToday = totalToday;
     },
     wsGotError: (state, action) => {
       state.wsError = action.payload;

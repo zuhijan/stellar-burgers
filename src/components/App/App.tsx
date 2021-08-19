@@ -18,12 +18,12 @@ import { authAPI } from "../../services/api/auth";
 import { deleteCookie, setCookie } from "../../services/utils/cookie";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { TRootState } from "../../services/store/store";
-import { cleanOrderMade } from "../../services/store/orderSlice";
+import { TRootState } from "../../services/store";
+import { cleanOrderMade } from "../../services/store/order/orderSlice";
 import {
   fetchIngredients,
   TIngredient,
-} from "../../services/store/ingredientsSlice";
+} from "../../services/store/ingredients/ingredientsSlice";
 import Feed from "../../pages/Feed/Feed";
 import FeedOrder from "../../pages/Feed/FeedOrder/FeedOrder";
 

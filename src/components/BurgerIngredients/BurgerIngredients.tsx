@@ -3,7 +3,7 @@ import s from "./burgerIngredients.module.scss";
 import BurgerIngredientsContainer from "./BurgerIngredientsContainer/BurgerIngredientsContainer";
 import Tabs from "../Tabs/Tabs";
 import { useSelector } from "react-redux";
-import { TRootState } from "../../services/store/store";
+import { TRootState } from "../../services/store";
 
 interface IBurgerIngredients {}
 

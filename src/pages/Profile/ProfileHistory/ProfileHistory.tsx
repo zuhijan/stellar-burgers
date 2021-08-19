@@ -7,9 +7,9 @@ import {
   TWSOrder,
   wsConnectionClose,
   wsConnectionStart,
-} from "../../../services/store/orderSlice";
+} from "../../../services/store/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../../services/store/store";
+import { TRootState } from "../../../services/store";
 import { getCookie } from "../../../services/utils/cookie";
 
 export const USER_ORDERS_URL = "wss://norma.nomoreparties.space/orders";

@@ -4,13 +4,13 @@ import s from "./FeedOrder.module.scss";
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../../services/store/store";
+import { TRootState } from "../../../services/store";
 import { findIngredient } from "../../../services/utils/findIngredient";
 import {
   cleanOrders,
   wsConnectionClose,
   wsConnectionStart,
-} from "../../../services/store/orderSlice";
+} from "../../../services/store/order/orderSlice";
 import { ALL_ORDERS_URL } from "../Feed";
 import { formatDate } from "../../../services/utils/formatDate";
 import { getCookie } from "../../../services/utils/cookie";

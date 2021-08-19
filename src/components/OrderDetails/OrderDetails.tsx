@@ -3,7 +3,7 @@ import s from "./OrderDetails.module.scss";
 import clsx from "clsx";
 import { ReactComponent as DoneIcon } from "../../images/done.svg";
 import { useSelector } from "react-redux";
-import { TRootState } from "../../services/store/store";
+import { TRootState } from "../../services/store";
 
 const OrderDetails = () => {
   const { orderMade } = useSelector((state: TRootState) => state.order);

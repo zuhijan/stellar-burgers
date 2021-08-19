@@ -2,8 +2,8 @@ import React, { FC, useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { ReactComponentElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../services/store/store";
-import { getUser } from "../services/store/authSlice";
+import { TRootState } from "../services/store";
+import { getUser } from "../services/store/auth/authSlice";
 
 interface IProtectedRoute {
   children: ReactComponentElement<any>;

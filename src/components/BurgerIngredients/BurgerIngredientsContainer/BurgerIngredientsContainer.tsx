@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import BurgerIngredientsCard from "../BurgerIngredientsCard/BurgerIngredientsCard";
 import clsx from "clsx";
 import s from "./burgerIngredientsContainer.module.scss";
-import { TIngredient } from "../../../services/store/ingredientsSlice";
+import { TIngredient } from "../../../services/store/ingredients/ingredientsSlice";
 
 export interface IBurgerIngredientsContainer {
   data: TIngredient[];
