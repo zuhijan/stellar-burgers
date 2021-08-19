@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ingredientsReducer from "./ingredientsSlice";
-import orderReducer from "./orderSlice";
-import authReducer from "./authSlice";
+import ingredientsReducer from "./ingredients/ingredientsSlice";
+import orderReducer from "./order/orderSlice";
+import authReducer from "./auth/authSlice";
 import { socketMiddleware } from "../middlewares/socket";
 
 const store = configureStore({

@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import {
   IngredientsDataType,
   SelectedIngredientsType,
-} from "../../components/App/App";
-import formatDataIngredients from "../utils/formatDataIngredients";
-import { addEl, deleteEl } from "../../components/App/utils";
-import { constructorAPI } from "../api/constructor";
+} from "../../../components/App/App";
+import formatDataIngredients from "../../utils/formatDataIngredients";
+import { addEl, deleteEl } from "../../../components/App/utils";
+import { constructorAPI } from "../../api/constructor";
 
 export type TIngredient = {
   _id: string;
@@ -33,19 +33,21 @@ export const fetchIngredients = createAsyncThunk(
   }
 );
 
+export const initialState = {
+  ingredients: {
+    main: [],
+    bun: [],
+    sauce: [],
+  } as IngredientsDataType,
+  selectedIngredients: {
+    bun: null,
+    other: [],
+  } as SelectedIngredientsType,
+};
+
 export const ingredientsSlice = createSlice({
   name: "ingredients",
-  initialState: {
-    ingredients: {
-      main: [],
-      bun: [],
-      sauce: [],
-    } as IngredientsDataType,
-    selectedIngredients: {
-      bun: null,
-      other: [],
-    } as SelectedIngredientsType,
-  },
+  initialState,
   reducers: {
     addSelectedIngredient: (state, action) => {
       state.selectedIngredients = addEl(

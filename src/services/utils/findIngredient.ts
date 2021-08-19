@@ -1,5 +1,5 @@
 import { IngredientsDataType } from "../../components/App/App";
-import { TIngredient } from "../store/ingredientsSlice";
+import { TIngredient } from "../store/ingredients/ingredientsSlice";
 
 export const findIngredient = (
   ingredients: IngredientsDataType,

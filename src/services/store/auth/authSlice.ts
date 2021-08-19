@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { authAPI } from "../api/auth";
-import { setCookie } from "../utils/cookie";
+import { authAPI } from "../../api/auth";
+import { setCookie } from "../../utils/cookie";
 
 export type TUserData = {
   email: string;
@@ -77,11 +77,11 @@ export const getUser = createAsyncThunk("auth/getUser", async () => {
   }
 });
 
+export const initialState = { userData: {} as TUserData };
+
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    userData: {} as TUserData,
-  },
+  initialState,
   reducers: {
     setUserData: (state, action) => {
       state.userData = action.payload;

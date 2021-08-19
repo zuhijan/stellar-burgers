@@ -8,9 +8,9 @@ import {
   TWSOrder,
   wsConnectionClose,
   wsConnectionStart,
-} from "../../services/store/orderSlice";
+} from "../../services/store/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../services/store/store";
+import { TRootState } from "../../services/store";
 
 export const ALL_ORDERS_URL = "wss://norma.nomoreparties.space/orders/all";
 
@@ -19,7 +19,7 @@ const Feed = () => {
   const history = useHistory();
   const location = useLocation();
 
-  const { orders, total, dailyTotal } = useSelector(
+  const { orders, total, totalToday } = useSelector(
     (state: TRootState) => state.order
   );
 
@@ -88,7 +88,7 @@ const Feed = () => {
           <p className="text text_type_main-medium">Выполнено за все время:</p>
           <p className="text text_type_digits-large mb-15">{total}</p>
           <p className="text text_type_main-medium">Выполнено за сегодня:</p>
-          <p className="text text_type_digits-large">{dailyTotal}</p>
+          <p className="text text_type_digits-large">{totalToday}</p>
         </div>
       </div>
     </div>

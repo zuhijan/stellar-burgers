@@ -1,6 +1,6 @@
 import { EnumEndpoints } from "./enumEndpoints";
 import { BASE_URL } from "./index";
-import { TLoginUserParams, TRegisterUserParams } from "../store/authSlice";
+import { TLoginUserParams, TRegisterUserParams } from "../store/auth/authSlice";
 import { getCookie } from "../utils/cookie";
 
 export const authAPI = {

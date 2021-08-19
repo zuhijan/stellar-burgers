@@ -2,9 +2,9 @@ import React, { FC } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/currency-icon";
 import s from "./burgerIngredientsCard.module.scss";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
-import { TRootState } from "../../../services/store/store";
+import { TRootState } from "../../../services/store";
 import { useSelector } from "react-redux";
-import { TIngredient } from "../../../services/store/ingredientsSlice";
+import { TIngredient } from "../../../services/store/ingredients/ingredientsSlice";
 import { useDrag } from "react-dnd";
 import { useHistory, useLocation } from "react-router-dom";
 

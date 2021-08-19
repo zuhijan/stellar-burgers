@@ -8,7 +8,7 @@ import {
   changePosition,
   deleteSelectedIngredient,
   TIngredient,
-} from "../../services/store/ingredientsSlice";
+} from "../../services/store/ingredients/ingredientsSlice";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
 import { XYCoord } from "dnd-core";

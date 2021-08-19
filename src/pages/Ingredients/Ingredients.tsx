@@ -2,7 +2,7 @@ import React from "react";
 import s from "./Ingredients.module.scss";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { TRootState } from "../../services/store/store";
+import { TRootState } from "../../services/store";
 import { findIngredient } from "../../services/utils/findIngredient";
 
 const Ingredients = () => {

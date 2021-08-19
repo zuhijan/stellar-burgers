@@ -6,13 +6,13 @@ import {
   ConstructorElement,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { postOrder } from "../../services/store/orderSlice";
+import { postOrder } from "../../services/store/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../services/store/store";
+import { TRootState } from "../../services/store";
 import {
   addSelectedIngredient,
   cleanBasket,
-} from "../../services/store/ingredientsSlice";
+} from "../../services/store/ingredients/ingredientsSlice";
 import { useDrop } from "react-dnd";
 import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
 import { useHistory, useLocation } from "react-router-dom";
@@ -94,11 +94,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
       : 0;
 
   return (
-    <div
-      ref={ref}
-      className={s.root}
-      style={{ outline: isHover ? "1px solid gold" : "" }}
-    >
+    <div ref={ref} className={clsx(s.root, isHover && s.over)}>
       {isEmptyConstructor ? (
         <div className={s.ingredientsContainer}>
           {selectedIngredients.bun && (

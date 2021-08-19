@@ -5,9 +5,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
 import s from "../Profile.module.scss";
-import { patchUser } from "../../../services/store/authSlice";
+import { patchUser } from "../../../services/store/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../../services/store/store";
+import { TRootState } from "../../../services/store";
 
 const ProfileForm = () => {
   const dispatch = useDispatch();

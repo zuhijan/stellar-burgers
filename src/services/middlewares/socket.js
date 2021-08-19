@@ -5,7 +5,7 @@ import {
   wsConnectionOpened,
   wsGotError,
   wsGotMessage,
-} from "../store/orderSlice";
+} from "../store/order/orderSlice";
 
 export const socketMiddleware = () => {
   return ({ dispatch }) => {

@@ -3,7 +3,7 @@ import s from "./Profile.module.scss";
 import clsx from "clsx";
 import { Switch, Route, useHistory, useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUserData, TUserData } from "../../services/store/authSlice";
+import { setUserData, TUserData } from "../../services/store/auth/authSlice";
 import { authAPI } from "../../services/api/auth";
 import { deleteCookie } from "../../services/utils/cookie";
 import ProfileForm from "./ProfileForm/ProfileForm";
