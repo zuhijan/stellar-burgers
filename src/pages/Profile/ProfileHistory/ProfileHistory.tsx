@@ -8,9 +8,9 @@ import {
   wsConnectionClose,
   wsConnectionStart,
 } from "../../../services/store/order/orderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../../services/store";
+
 import { getCookie } from "../../../services/utils/cookie";
+import { useDispatch, useSelector } from "../../../services/hooks";
 
 export const USER_ORDERS_URL = "wss://norma.nomoreparties.space/orders";
 
@@ -19,7 +19,7 @@ const ProfileHistory = () => {
   const location = useLocation();
   const history = useHistory();
 
-  const { orders } = useSelector((state: TRootState) => state.order);
+  const { orders } = useSelector((state) => state.order);
 
   console.log(`### ordersProfileHistory`, orders);
   useEffect(() => {

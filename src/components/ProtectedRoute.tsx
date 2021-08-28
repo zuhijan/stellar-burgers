@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { ReactComponentElement } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../services/store";
+
 import { getUser } from "../services/store/auth/authSlice";
+import { useDispatch, useSelector } from "../services/hooks";
 
 interface IProtectedRoute {
   children: ReactComponentElement<any>;
@@ -13,7 +13,7 @@ interface IProtectedRoute {
 
 const ProtectedRoute: FC<IProtectedRoute> = ({ children, ...rest }) => {
   const dispatch = useDispatch();
-  const { userData } = useSelector((state: TRootState) => state.auth);
+  const { userData } = useSelector((state) => state.auth);
   const [isUserLoaded, setUserLoaded] = useState(false);
 
   const init = async () => {

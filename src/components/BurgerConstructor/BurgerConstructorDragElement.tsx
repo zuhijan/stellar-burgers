@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useRef } from "react";
 import s from "./burgerConstructor.module.scss";
 import {
   ConstructorElement,
@@ -10,8 +10,9 @@ import {
   TIngredient,
 } from "../../services/store/ingredients/ingredientsSlice";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import { XYCoord } from "dnd-core";
+import { DragObjectFactory } from "react-dnd/lib";
 
 interface IBurgerConstructorDragElement {
   ingredient: TIngredient;
@@ -37,6 +38,7 @@ const BurgerConstructorDragElement: FC<IBurgerConstructorDragElement> = ({
         return;
       }
 
+      console.log(`### item`, item);
       const dragIndex = item.index;
       const hoverIndex = index;
 
@@ -101,7 +103,6 @@ const BurgerConstructorDragElement: FC<IBurgerConstructorDragElement> = ({
       style={{
         opacity: opacity,
       }}
-      // @ts-ignore
       ref={ref}
       data-handler-id={handlerId}
     >

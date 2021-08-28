@@ -6,7 +6,7 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { registerUser } from "../../services/store/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 
 interface IRegister {}
 

@@ -2,36 +2,45 @@ import React, { FC, useCallback, useRef } from "react";
 import s from "./burgerIngredients.module.scss";
 import BurgerIngredientsContainer from "./BurgerIngredientsContainer/BurgerIngredientsContainer";
 import Tabs from "../Tabs/Tabs";
-import { useSelector } from "react-redux";
-import { TRootState } from "../../services/store";
+
+import { useSelector } from "../../services/hooks";
 
 interface IBurgerIngredients {}
 
 const BurgerIngredients: FC<IBurgerIngredients> = () => {
   const [current, setCurrent] = React.useState("bun");
 
-  const containerRef = useRef<any>();
-  const bunRef = useRef<any>();
-  const mainRef = useRef<any>();
-  const sauceRef = useRef<any>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bunRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
 
-  const { ingredients } = useSelector((state: TRootState) => state.ingredients);
+  const { ingredients } = useSelector((state) => state.ingredients);
 
   const handleClickTab = useCallback((item) => {
     setCurrent(item);
   }, []);
 
   const handleScroll = () => {
-    const containerPos = Math.trunc(
-      containerRef.current.getBoundingClientRect().top
-    );
+    let bunPos: number = 0;
+    let mainPos: number = 0;
+    let saucePos: number = 0;
+    let containerPos: number = 0;
 
-    const bunPos = Math.trunc(bunRef.current.getBoundingClientRect().top);
-
-    const mainPos = Math.trunc(mainRef.current.getBoundingClientRect().top);
-
-    const saucePos = Math.trunc(sauceRef.current.getBoundingClientRect().top);
-
+    if (containerRef && containerRef.current) {
+      containerPos = Math.trunc(
+        containerRef.current.getBoundingClientRect().top
+      );
+    }
+    if (bunRef && bunRef.current) {
+      bunPos = Math.trunc(bunRef.current.getBoundingClientRect().top);
+    }
+    if (mainRef && mainRef.current) {
+      mainPos = Math.trunc(mainRef.current.getBoundingClientRect().top);
+    }
+    if (sauceRef && sauceRef.current) {
+      saucePos = Math.trunc(sauceRef.current.getBoundingClientRect().top);
+    }
     let initValue = [
       {
         value: "bun",

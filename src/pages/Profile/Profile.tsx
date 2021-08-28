@@ -2,7 +2,7 @@ import React from "react";
 import s from "./Profile.module.scss";
 import clsx from "clsx";
 import { Switch, Route, useHistory, useRouteMatch } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import { setUserData, TUserData } from "../../services/store/auth/authSlice";
 import { authAPI } from "../../services/api/auth";
 import { deleteCookie } from "../../services/utils/cookie";

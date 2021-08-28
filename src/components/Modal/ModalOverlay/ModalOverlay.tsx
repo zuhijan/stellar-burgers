@@ -29,7 +29,7 @@ const ModalOverlay: FC<IModalOverlay> = ({ children, onClose }) => {
   }, [onClose]);
 
   useEffect(() => {
-    const handleEsc = (e: any) => {
+    const handleEsc = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
         onClose();
       }

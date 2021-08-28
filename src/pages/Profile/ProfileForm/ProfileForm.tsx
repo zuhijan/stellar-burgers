@@ -6,13 +6,12 @@ import {
 import clsx from "clsx";
 import s from "../Profile.module.scss";
 import { patchUser } from "../../../services/store/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../../services/store";
+import { useDispatch, useSelector } from "../../../services/hooks";
 
 const ProfileForm = () => {
   const dispatch = useDispatch();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const { userData } = useSelector((state: TRootState) => state.auth);
+  const { userData } = useSelector((state) => state.auth);
 
   const [form, setForm] = React.useState({
     name: userData.name,
