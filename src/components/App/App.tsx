@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import history from "history";
 
 import s from "./App.module.scss";
 import AppHeader from "../AppHeader/AppHeader";
@@ -18,7 +19,6 @@ import { authAPI } from "../../services/api/auth";
 import { deleteCookie, setCookie } from "../../services/utils/cookie";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { TRootState } from "../../services/store";
 import { cleanOrderMade } from "../../services/store/order/orderSlice";
 import {
   fetchIngredients,
@@ -26,6 +26,7 @@ import {
 } from "../../services/store/ingredients/ingredientsSlice";
 import Feed from "../../pages/Feed/Feed";
 import FeedOrder from "../../pages/Feed/FeedOrder/FeedOrder";
+import { useDispatch, useSelector } from "../../services/hooks";
 
 export type IngredientsDataType = {
   bun: TIngredient[];
@@ -38,12 +39,16 @@ export type SelectedIngredientsType = {
   other: TIngredient[];
 };
 
+interface ILocation {
+  background?: history.Location;
+}
+
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation<any>();
+  const location = useLocation<ILocation>();
   const history = useHistory();
   const refreshToken = localStorage.getItem("refreshToken");
-  const { orderMade } = useSelector((state: TRootState) => state.order);
+  const { orderMade } = useSelector((state) => state.order);
 
   const checkToken = async () => {
     try {

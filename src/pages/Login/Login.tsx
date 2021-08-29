@@ -5,7 +5,7 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import s from "./Login.module.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import { loginUser } from "../../services/store/auth/authSlice";
 
 export interface ILocationState {

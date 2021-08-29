@@ -3,8 +3,6 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import s from "./FeedOrder.module.scss";
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../../services/store";
 import { findIngredient } from "../../../services/utils/findIngredient";
 import {
   cleanOrders,
@@ -15,6 +13,7 @@ import { ALL_ORDERS_URL } from "../Feed";
 import { formatDate } from "../../../services/utils/formatDate";
 import { getCookie } from "../../../services/utils/cookie";
 import { USER_ORDERS_URL } from "../../Profile/ProfileHistory/ProfileHistory";
+import { useDispatch, useSelector } from "../../../services/hooks";
 
 export enum enumStatusOrder {
   created = "Создан",
@@ -33,8 +32,8 @@ interface IFeedOrder {
 const FeedOrder: FC<IFeedOrder> = ({ profile }) => {
   const dispatch = useDispatch();
   const { orderId } = useParams<{ orderId: string }>();
-  const { orders } = useSelector((state: TRootState) => state.order);
-  const { ingredients } = useSelector((state: TRootState) => state.ingredients);
+  const { orders } = useSelector((state) => state.order);
+  const { ingredients } = useSelector((state) => state.ingredients);
 
   const order = orders.find((item) => item.number === +orderId);
 

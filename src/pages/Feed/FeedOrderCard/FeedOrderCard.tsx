@@ -3,11 +3,11 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import s from "./FeedOrderCard.module.scss";
 import clsx from "clsx";
 import { TWSOrder } from "../../../services/store/order/orderSlice";
-import { useSelector } from "react-redux";
-import { TRootState } from "../../../services/store";
+
 import { findIngredient } from "../../../services/utils/findIngredient";
 import { formatDate } from "../../../services/utils/formatDate";
 import { enumStatusOrder } from "../FeedOrder/FeedOrder";
+import { useSelector } from "../../../services/hooks";
 
 interface IFeedOrderCard {
   order: TWSOrder;
@@ -18,7 +18,7 @@ interface IFeedOrderCard {
 const FeedOrderCard: FC<IFeedOrderCard> = ({ order, onClick }) => {
   const hiddenCount = order.ingredients.length - 5;
 
-  const { ingredients } = useSelector((state: TRootState) => state.ingredients);
+  const { ingredients } = useSelector((state) => state.ingredients);
 
   const orderPrice = order.ingredients.reduce((acc, curValue) => {
     const ingredient = findIngredient(ingredients, curValue);

@@ -7,8 +7,6 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { postOrder } from "../../services/store/order/orderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../services/store";
 import {
   addSelectedIngredient,
   cleanBasket,
@@ -16,6 +14,7 @@ import {
 import { useDrop } from "react-dnd";
 import BurgerConstructorDragElement from "./BurgerConstructorDragElement";
 import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "../../services/hooks";
 
 interface IBurgerConstructor {}
 
@@ -27,9 +26,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = () => {
   const location = useLocation();
   const refreshToken = localStorage.getItem("refreshToken");
 
-  const { selectedIngredients } = useSelector(
-    (state: TRootState) => state.ingredients
-  );
+  const { selectedIngredients } = useSelector((state) => state.ingredients);
 
   const [{ isHover }, ref] = useDrop({
     accept: "ingredients",

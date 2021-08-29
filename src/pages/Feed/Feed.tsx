@@ -9,8 +9,8 @@ import {
   wsConnectionClose,
   wsConnectionStart,
 } from "../../services/store/order/orderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { TRootState } from "../../services/store";
+
+import { useDispatch, useSelector } from "../../services/hooks";
 
 export const ALL_ORDERS_URL = "wss://norma.nomoreparties.space/orders/all";
 
@@ -19,9 +19,7 @@ const Feed = () => {
   const history = useHistory();
   const location = useLocation();
 
-  const { orders, total, totalToday } = useSelector(
-    (state: TRootState) => state.order
-  );
+  const { orders, total, totalToday } = useSelector((state) => state.order);
 
   useEffect(() => {
     dispatch(wsConnectionStart(ALL_ORDERS_URL));

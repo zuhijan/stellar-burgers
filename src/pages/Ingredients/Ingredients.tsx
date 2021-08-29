@@ -1,12 +1,12 @@
 import React from "react";
 import s from "./Ingredients.module.scss";
-import { useSelector } from "react-redux";
+
 import { useParams } from "react-router-dom";
-import { TRootState } from "../../services/store";
 import { findIngredient } from "../../services/utils/findIngredient";
+import { useSelector } from "../../services/hooks";
 
 const Ingredients = () => {
-  const { ingredients } = useSelector((state: TRootState) => state.ingredients);
+  const { ingredients } = useSelector((state) => state.ingredients);
   const { ingredientId } = useParams<{ ingredientId?: string }>();
 
   const ingredient = findIngredient(ingredients, ingredientId!);

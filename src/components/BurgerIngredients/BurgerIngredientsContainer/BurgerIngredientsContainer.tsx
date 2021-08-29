@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, RefObject } from "react";
 import BurgerIngredientsCard from "../BurgerIngredientsCard/BurgerIngredientsCard";
 import clsx from "clsx";
 import s from "./burgerIngredientsContainer.module.scss";
@@ -7,7 +7,7 @@ import { TIngredient } from "../../../services/store/ingredients/ingredientsSlic
 export interface IBurgerIngredientsContainer {
   data: TIngredient[];
   title: string;
-  customRef: any;
+  customRef: RefObject<HTMLDivElement>;
 }
 
 const BurgerIngredientsContainer: FC<IBurgerIngredientsContainer> = ({
